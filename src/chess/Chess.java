@@ -40,7 +40,7 @@ public class Chess {
 	private static ReturnPiece[][] board = new ReturnPiece[8][8];
 
 	// Field to track the current player's turn
-	private static Player currentPlayer = Player.white; // White starts first
+	private static Player currentPlayer = Player.white; // White starts first, update this field after each move
 
 	// Method to create a piece, since the ReturnPiece class has no constructor
 	protected static ReturnPiece createPiece(ReturnPiece.PieceType pieceType, ReturnPiece.PieceFile pieceFile, int pieceRank) {
@@ -68,6 +68,7 @@ public class Chess {
 		/* FILL IN THIS METHOD */
 		
 		// 1. Parse the move string into the from and to squares
+		// Going to move this to a separate class called MoveParser, more complex than I realized, forgot special moves below
 		String trimmedMove = move.trim(); // Remove leading and trailing whitespace
 		String[] squares = trimmedMove.split(" "); // Split the string into two squares
 		String fromSquare = squares[0]; // The first square is the from square
