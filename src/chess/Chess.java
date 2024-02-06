@@ -42,7 +42,7 @@ public class Chess {
 	// Method to create a piece since the ReturnPiece class has no constructor
 	private static ReturnPiece createPiece(ReturnPiece.PieceType pieceType, ReturnPiece.PieceFile pieceFile, int pieceRank) {
 		ReturnPiece piece = new ReturnPiece();
-		// Assuming there are methods or direct access to set these properties
+		// Directly assign the values to the fields of the piece object
 		piece.pieceType = pieceType;
 		piece.pieceFile = pieceFile;
 		piece.pieceRank = pieceRank;
@@ -83,7 +83,7 @@ public class Chess {
 				board[i][j] = null;
 			}
 		}
-
+		// Might make this a separate class later to keep the code clean
 		// Initialize the white rooks
 		board[0][0] = createPiece(ReturnPiece.PieceType.WR, ReturnPiece.PieceFile.a, 1);
 		board[0][7] = createPiece(ReturnPiece.PieceType.WR, ReturnPiece.PieceFile.h, 1);
@@ -130,6 +130,5 @@ public class Chess {
 		for (int i = 0; i < 8; i++) {
 			board[6][i] = createPiece(ReturnPiece.PieceType.BP, ReturnPiece.PieceFile.values()[i], 7);
 		}
-
 	}
 }
