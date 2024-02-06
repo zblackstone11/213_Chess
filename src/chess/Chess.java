@@ -71,6 +71,13 @@ public class Chess {
 		String toSquare = squares[1]; // The second square is the to square
 
 		// 2. Check if the move is legal
+			// The move is legal if:
+			// a. White is moving and it's white's turn, or black is moving and it's black's turn
+			// b. Check if the from square contains a piece
+			// c. Check if the piece can move to the to square
+			// d. Check if the to square contains a piece of the same color
+			// e. Check if the move puts the moving player in check (self-check)
+			// f. Check if the move puts the opponent in check
 
 		// 3. If the move is legal, execute the move and update the 2D array board
 
