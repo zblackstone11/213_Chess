@@ -64,6 +64,22 @@ public class Chess {
 
 		/* FILL IN THIS METHOD */
 		
+		// 1. Parse the move string into the from and to squares
+		String trimmedMove = move.trim(); // Remove leading and trailing whitespace
+		String[] squares = trimmedMove.split(" "); // Split the string into two squares
+		String fromSquare = squares[0]; // The first square is the from square
+		String toSquare = squares[1]; // The second square is the to square
+
+		// 2. Check if the move is legal
+
+		// 3. If the move is legal, execute the move and update the 2D array board
+
+		// 4. Check if the move puts the opponent in check or checkmate
+
+		// 5. Convert the 2D array board into an ArrayList of ReturnPiece objects
+
+		// 6. Create a new returnPlay object, setting the piecesOnBoard field with the ArrayList from step 5, and
+		// 	  set the message field with the appropriate message
 		
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
 		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
