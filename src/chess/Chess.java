@@ -39,6 +39,9 @@ public class Chess {
 	// Field for the board array at class level, so that it can be accessed from any method in the class
 	private static ReturnPiece[][] board = new ReturnPiece[8][8];
 
+	// Field to track the current player's turn
+	private static Player currentPlayer = Player.white; // White starts first
+
 	// Method to create a piece, since the ReturnPiece class has no constructor
 	protected static ReturnPiece createPiece(ReturnPiece.PieceType pieceType, ReturnPiece.PieceFile pieceFile, int pieceRank) {
 		ReturnPiece piece = new ReturnPiece();
