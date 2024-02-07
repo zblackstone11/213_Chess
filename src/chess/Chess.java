@@ -45,7 +45,6 @@ public class Chess {
 	// Method to create a piece, since the ReturnPiece class has no constructor
 	protected static ReturnPiece createPiece(ReturnPiece.PieceType pieceType, ReturnPiece.PieceFile pieceFile, int pieceRank) {
 		ReturnPiece piece = new ReturnPiece();
-		// Directly assign the values to the fields of the piece object
 		piece.pieceType = pieceType;
 		piece.pieceFile = pieceFile;
 		piece.pieceRank = pieceRank;
@@ -55,21 +54,16 @@ public class Chess {
 	enum Player { white, black }
 	
 	/**
-	 * Plays the next move for whichever player has the turn.
-	 * 
 	 * @param move String for next move, e.g. "a2 a3"
-	 * 
 	 * @return A ReturnPlay instance that contains the result of the move.
-	 *         See the section "The Chess class" in the assignment description for details of
-	 *         the contents of the returned ReturnPlay instance.
 	 */
 	public static ReturnPlay play(String move) {
 		
-		// 1. Parse the move string into the from and to squares
+		// 1. Parse the move string into the from and to squares and the move type
 		ParsedMove parsedMove = MoveParser.parseMove(move);
 		ReturnPlay returnPlay = new ReturnPlay();
 
-		// If the move is a resignation, return a ReturnPlay object with the appropriate message
+		// If the move is a resignation, return a ReturnPlay object with the appropriate message and the current board state
 		if (parsedMove.moveType == MoveType.RESIGN) {
 			returnPlay.piecesOnBoard = BoardToPieceListConverter.convertToPieceList(board);
 		
@@ -81,8 +75,7 @@ public class Chess {
 			return returnPlay;
 		}		
 
-		// 2. Check if the move is legal
-			// The move is legal if:
+		// 2. Check if the move is legal for other parseMove types DRAW, REGULAR, PAWN_PROMOTION
 			// a. White is moving and it's white's turn, or black is moving and it's black's turn
 			// b. Check if the from square contains a piece
 			// c. Check if the piece can move to the to square
