@@ -37,13 +37,16 @@ class ReturnPlay {
 public class Chess {
 
 	// Field for the board array at class level, so that it can be accessed from any method in the class
-	private static ReturnPiece[][] board = new ReturnPiece[8][8];
+	public static ReturnPiece[][] board = new ReturnPiece[8][8];
 
 	// Field to track the current player's turn
 	public static Player currentPlayer = Player.white; // White starts first, update this field after each move
 
+	// Field to track the movement status of important pieces for castling
+	public static PieceMovementTracker pieceMovementTracker = new PieceMovementTracker();
+
 	// Method to create a piece, since the ReturnPiece class has no constructor
-	protected static ReturnPiece createPiece(ReturnPiece.PieceType pieceType, ReturnPiece.PieceFile pieceFile, int pieceRank) {
+	public static ReturnPiece createPiece(ReturnPiece.PieceType pieceType, ReturnPiece.PieceFile pieceFile, int pieceRank) {
 		ReturnPiece piece = new ReturnPiece();
 		piece.pieceType = pieceType;
 		piece.pieceFile = pieceFile;
@@ -73,27 +76,50 @@ public class Chess {
 				returnPlay.message = ReturnPlay.Message.RESIGN_WHITE_WINS;
 			}
 			return returnPlay;
-		}		
+		}
 
-		// 2. Check if the move is legal for other parseMove types DRAW, REGULAR, PAWN_PROMOTION
-			// a. White is moving and it's white's turn, or black is moving and it's black's turn
-			// b. Check if the from square contains a piece
-			// c. Check if the piece can move to the to square
-			// d. Check if the to square contains a piece of the same color
-			// e. Check if the move puts the moving player in check (self-check)
-			// f. Check if the move puts the opponent in check
-
-		// 3. If the move is legal, execute the move and update the 2D array board
-
-		// 4. Check if the move puts the opponent in check or checkmate
-
-		// 5. Convert the 2D array board into an ArrayList of ReturnPiece objects
-
-		// 6. Create a new returnPlay object, setting the piecesOnBoard field with the ArrayList from step 5, and
-		// 	  set the message field with the appropriate message
+		// If the move is a draw, return a ReturnPlay object with the appropriate message and the current board state
+		else if (parsedMove.moveType == MoveType.DRAW) {
+			// Check if the move is legal
+			// Make move first as per the rules
+			// Update the board with the move
+			// Maybe reset the game
+			returnPlay.piecesOnBoard = BoardToPieceListConverter.convertToPieceList(board);
+			returnPlay.message = ReturnPlay.Message.DRAW;
+			return returnPlay;
+		}
 		
-		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
-		return null; // comment this out when done with everything else
+		// If the move is an explicit pawn promotion, return a ReturnPlay object with the appropriate message and the current board state
+		else if (parsedMove.moveType == MoveType.PAWN_PROMOTION) {
+			// Check if the move is legal
+			// Check if the move results in check or checkmate
+			// Make move first as per the rules
+			// Update the board with the move
+			returnPlay.piecesOnBoard = BoardToPieceListConverter.convertToPieceList(board);
+			returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
+			return returnPlay;
+		}
+		
+		// If the move is regular, check if the move is legal
+		else if (parsedMove.moveType == MoveType.REGULAR) {
+			// Check if the move is legal
+			// Check if the move results in check or checkmate
+			// Check if it is an implicit promotion to Queen, a castle, an en passant etc
+			// If castle, check the piece movement tracker to see if the king or rook has moved before
+			// Make move first as per the rules
+			// Update the board with the move
+			returnPlay.piecesOnBoard = BoardToPieceListConverter.convertToPieceList(board);
+			returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
+			return returnPlay;
+		}
+
+		// Otherwise an illegal move
+		// ReturnPlay instance with pieces on board same as previous state of the board and message as ILLEGAL_MOVE
+		else {
+			returnPlay.piecesOnBoard = BoardToPieceListConverter.convertToPieceList(board);
+			returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
+			return returnPlay;
+		}
 	}
 	
 	// This method should reset the game, and start from scratch.
@@ -104,5 +130,7 @@ public class Chess {
 		BoardInitializer.initializeBoard(board);
 		// In case the game was already in progress, reset the current player to white
 		currentPlayer = Player.white;
+		// Reset the movement status of each piece
+		pieceMovementTracker.reset();
 	}
 }

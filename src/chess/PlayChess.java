@@ -77,5 +77,4 @@ public class PlayChess {
 			board[8-rp.pieceRank][file] = ppstr;
 		}	
 	}
-	
 }
