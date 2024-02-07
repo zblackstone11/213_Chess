@@ -40,7 +40,7 @@ public class Chess {
 	private static ReturnPiece[][] board = new ReturnPiece[8][8];
 
 	// Field to track the current player's turn
-	private static Player currentPlayer = Player.white; // White starts first, update this field after each move
+	public static Player currentPlayer = Player.white; // White starts first, update this field after each move
 
 	// Method to create a piece, since the ReturnPiece class has no constructor
 	protected static ReturnPiece createPiece(ReturnPiece.PieceType pieceType, ReturnPiece.PieceFile pieceFile, int pieceRank) {
@@ -68,11 +68,16 @@ public class Chess {
 		/* FILL IN THIS METHOD */
 		
 		// 1. Parse the move string into the from and to squares
-		// Going to move this to a separate class called MoveParser, more complex than I realized, forgot special moves below
-		String trimmedMove = move.trim(); // Remove leading and trailing whitespace
-		String[] squares = trimmedMove.split(" "); // Split the string into two squares
-		String fromSquare = squares[0]; // The first square is the from square
-		String toSquare = squares[1]; // The second square is the to square
+		ParsedMove parsedMove = MoveParser.parseMove(move);
+
+		// If the move is a resignation, return the appropriate message and end the game
+		if (parsedMove.moveType == MoveType.RESIGN) {
+			if (currentPlayer == Player.white) {
+				return new ReturnPlay(ReturnPlay.Message.RESIGN_BLACK_WINS);
+			} else {
+				return new ReturnPlay(ReturnPlay.Message.RESIGN_WHITE_WINS);
+			}
+		}
 
 		// 2. Check if the move is legal
 			// The move is legal if:
@@ -97,13 +102,8 @@ public class Chess {
 		return null;
 	}
 	
-	
-	/**
-	 * This method should reset the game, and start from scratch.
-	 */
+	// This method should reset the game, and start from scratch.
 	public static void start() {
-		/* FILL IN THIS METHOD */
-
 		// Initialize the 2D array board with nulls to start, resets the board
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
@@ -112,5 +112,7 @@ public class Chess {
 		}
 		// Initialize the board with pieces in their initial positions, resets the pieces
 		BoardInitializer.initializeBoard(board);
+		// In case the game was already in progress, reset the current player to white
+		currentPlayer = Player.white;
 	}
 }
