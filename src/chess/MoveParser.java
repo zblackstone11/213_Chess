@@ -1,6 +1,6 @@
 package chess;
 
-enum MoveType { RESIGN, DRAW, REGULAR, PAWN_PROMOTION, ILLEGAL_MOVE } // Only doing moves that can be identified by the parser in this class
+enum MoveType { RESIGN, DRAW, REGULAR, PAWN_PROMOTION } // Only doing moves that can be identified by the text input in this class
 class ParsedMove {
     MoveType moveType;
     ReturnPiece.PieceFile startFile;
