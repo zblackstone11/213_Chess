@@ -71,6 +71,5 @@ public class MoveParser {
             parsedMove.setSquares(squares[0], squares[1]);
             return parsedMove;
         }
-        // Might want to add an else statement to handle illegal moves though not strictly necessary?
     }
 }
