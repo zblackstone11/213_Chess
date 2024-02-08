@@ -78,7 +78,7 @@ public class Chess {
 			// Make move first as per the rules
 			// Update the board with the move
 			// Maybe reset the game explicitly here
-			// returnPlay.piecesOnBoard = BoardToPieceListConverter.convertToPieceList(board);
+			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
 			returnPlay.message = ReturnPlay.Message.DRAW;
 			return returnPlay;
 		}
@@ -90,7 +90,7 @@ public class Chess {
 			// Check if the move results in check OR checkmate
 			// Update the board with the move
 			// Update the prior move field
-			// returnPlay.piecesOnBoard = BoardToPieceListConverter.convertToPieceList(board);
+			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
 			returnPlay.message = null; // Could be CHECK, CHECKMATE_BLACK_WINS, CHECKMATE_WHITE_WINS, ILLEGAL_MOVE
 			return returnPlay;
 		}
@@ -98,7 +98,7 @@ public class Chess {
 		// If the move is regular, check if the move is legal, will be hardest to implement
 		else /* move type must be REGULAR, only other option assuming all inputs are properly formatted */ {
 			// Can be a regular move, a castle, an implicit pawn promotion to queen, or an en passant
-			// returnPlay.piecesOnBoard = BoardToPieceListConverter.convertToPieceList(board);
+			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
 			returnPlay.message = null; // Could be CHECK, CHECKMATE_BLACK_WINS, CHECKMATE_WHITE_WINS, ILLEGAL_MOVE
 			return returnPlay;
 		}

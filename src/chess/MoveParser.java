@@ -1,7 +1,7 @@
 package chess;
 // Only four move types that can be identified EXPLICITLY by the text input in this class
 enum MoveType { RESIGN, DRAW, REGULAR, PAWN_PROMOTION }
-class ParsedMove {
+class ParsedMove { 
     MoveType moveType;
     ReturnPiece.PieceFile startFile;
     int startRank;
@@ -38,6 +38,8 @@ class ParsedMove {
             case 'N':
                 this.promotionPieceType = 'N';
                 break;
+            default:
+                this.promotionPieceType = 'x'; // Default, should not happen
         }
     }
 }
@@ -57,7 +59,7 @@ public class MoveParser {
             parsedMove.setSquares(squares[0], squares[1]);
             return parsedMove;
         }
-        else if (trimmedMove.matches(".* [QRBN]$")) { // Corrected regex for pawn promotion
+        else if (trimmedMove.matches(".* [QRBN]$")) { // Corrected regex for pawn promotion, $ to match end of string
             String[] parts = trimmedMove.split(" ");
             char promotionPiece = parts[2].charAt(0); // Corrected getting the promotion piece character
             ParsedMove parsedMove = new ParsedMove(MoveType.PAWN_PROMOTION);
