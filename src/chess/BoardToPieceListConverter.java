@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 
+// Class to convert the current board state into an ArrayList of ReturnPiece objects, needed for each move
 public class BoardToPieceListConverter {
     
     // Method to convert the current board state into an ArrayList of ReturnPiece objects
@@ -12,12 +13,11 @@ public class BoardToPieceListConverter {
             for (int j = 0; j < board[i].length; j++) {
                 ReturnPiece piece = board[i][j];
                 if (piece != null) {
-                    ReturnPiece pieceToAdd = Chess.createPiece(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    ReturnPiece pieceToAdd = CreatePiece.createPiece(piece.pieceType, piece.pieceFile, piece.pieceRank);
                     piecesOnBoard.add(pieceToAdd);
                 }
             }
         }
-
         return piecesOnBoard;
     }
 }

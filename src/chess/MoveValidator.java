@@ -1,5 +1,5 @@
 package chess;
-
+// This class is responsible for validating the legality of moves
 public class MoveValidator {
 
     private ReturnPiece[][] board;
@@ -34,6 +34,4 @@ public class MoveValidator {
         // Implement pawn promotion checks here
         return true; // Placeholder
     }
-
-    // Add other helper methods as necessary
 }

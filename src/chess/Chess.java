@@ -36,26 +36,17 @@ class ReturnPlay {
 
 public class Chess {
 
-	// Field for the board matrix at class level, so that it can be accessed from any method in the class
+	// Field for the board matrix at class level, so that it can be accessed from any method in the class/package
 	public static ReturnPiece[][] board = new ReturnPiece[8][8];
 
-	// Field to track the current player's turn
-	public static Player currentPlayer = Player.white; // White starts first, update this field after each move
+	// Field to track the current player's turn, updated after each move
+	public static Player currentPlayer = Player.white;
 
 	// Field to track the movement status of important pieces for castling
 	public static PieceMovementTracker pieceMovementTracker = new PieceMovementTracker();
 
-	// Might want a field for prior move here later, to check for en passant and self-check
+	// We want a field for prior move here later, to check for en passant and self-check
 	public static String priorMove = null;
-
-	// Method to create a piece, since the ReturnPiece class has no constructor
-	public static ReturnPiece createPiece(ReturnPiece.PieceType pieceType, ReturnPiece.PieceFile pieceFile, int pieceRank) {
-		ReturnPiece piece = new ReturnPiece();
-		piece.pieceType = pieceType;
-		piece.pieceFile = pieceFile;
-		piece.pieceRank = pieceRank;
-		return piece;
-	}
 	
 	enum Player { white, black }
 	
@@ -63,6 +54,7 @@ public class Chess {
 	 * @param move String for next move, e.g. "a2 a3"
 	 * @return A ReturnPlay instance that contains the result of the move.
 	 */
+
 	public static ReturnPlay play(String move) {
 
 		// 1. Parse the move string into the from and to squares and the move type if it's explcit from the string
@@ -70,6 +62,7 @@ public class Chess {
 		ReturnPlay returnPlay = new ReturnPlay();
 
 		// If the move is a resignation, return a ReturnPlay object with the appropriate message and the current board state
+		// Fully implemented as is
 		if (parsedMove.moveType == MoveType.RESIGN) {
 			returnPlay.piecesOnBoard = BoardToPieceListConverter.convertToPieceList(board);
 		
@@ -83,10 +76,11 @@ public class Chess {
 
 		// If the move is a draw, return a ReturnPlay object with the appropriate message and the current board state
 		else if (parsedMove.moveType == MoveType.DRAW) {
-			// Check if the move is legal
+			// Can be a regular move, a castle, an implicit pawn promotion to queen, or an en passant
+			// Check if the move is legal, only continue if it is, else return an illegal move message and the current board state
 			// Make move first as per the rules
 			// Update the board with the move
-			// Maybe reset the game
+			// Maybe reset the game explicitly here
 			returnPlay.piecesOnBoard = BoardToPieceListConverter.convertToPieceList(board);
 			returnPlay.message = ReturnPlay.Message.DRAW;
 			return returnPlay;
@@ -94,41 +88,21 @@ public class Chess {
 		
 		// If the move is an EXPLICIT pawn promotion, return a ReturnPlay object with the appropriate message and the current board state
 		else if (parsedMove.moveType == MoveType.PAWN_PROMOTION) {
-			// Check if the move is legal
-			// Make move first as per the rules
+			// Check if the move is legal, only continue if it is
+			// Make move
 			// Check if the move results in check OR checkmate
 			// Update the board with the move
+			// Update the prior move field
 			returnPlay.piecesOnBoard = BoardToPieceListConverter.convertToPieceList(board);
 			returnPlay.message = null; // Could be CHECK, CHECKMATE_BLACK_WINS, CHECKMATE_WHITE_WINS, ILLEGAL_MOVE
-			// if return play message does not equal ILLEGAL_MOVE, then update the priorMove field
-			if (returnPlay.message != ReturnPlay.Message.ILLEGAL_MOVE) {
-				priorMove = move;
-			}
 			return returnPlay;
 		}
 		
 		// If the move is regular, check if the move is legal, will be hardest to implement
-		else if (parsedMove.moveType == MoveType.REGULAR) {
-			// Check if the move is legal
-			// Check if the move results in check or checkmate
-			// Check if it is an IMPLICIT promotion to Queen, a castle, an en passant etc
-			// If castle, check the piece movement tracker to see if the king or rook has moved before
-			// If en passant, check if the previous move was a pawn double move
-			// Make move first as per the rules
-			// Update the board with the move
+		else /* move type must be REGULAR, only other option */ {
+			// Can be a regular move, a castle, an implicit pawn promotion to queen, or an en passant
 			returnPlay.piecesOnBoard = BoardToPieceListConverter.convertToPieceList(board);
 			returnPlay.message = null; // Could be CHECK, CHECKMATE_BLACK_WINS, CHECKMATE_WHITE_WINS, ILLEGAL_MOVE
-			if (returnPlay.message != ReturnPlay.Message.ILLEGAL_MOVE) {
-				priorMove = move;
-			}
-			return returnPlay;
-		}
-
-		// Otherwise an illegal move format was entered
-		// ReturnPlay instance with pieces on board same as previous state of the board and message as ILLEGAL_MOVE
-		else {
-			returnPlay.piecesOnBoard = BoardToPieceListConverter.convertToPieceList(board);
-			returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
 			return returnPlay;
 		}
 	}

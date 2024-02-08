@@ -1,5 +1,6 @@
 package chess;
-
+// Class to track the movement status of important pieces for castling, no need to deal with other pieces
+// For en passant, we can just check the prior move string in the Chess class
 public class PieceMovementTracker {
     // Track if each rook has moved (false by default)
     private boolean whiteKingSideRookMoved = false;
