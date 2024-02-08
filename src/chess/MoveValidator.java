@@ -3,11 +3,11 @@ package chess;
 public class MoveValidator {
 
     private ReturnPiece[][] board;
-    private PieceMovementTracker pieceMovementTracker;
+    private PieceMovementTracker pieceMovementTracker; 
 
     public MoveValidator(ReturnPiece[][] board, PieceMovementTracker pieceMovementTracker) {
-        this.board = board;
-        this.pieceMovementTracker = pieceMovementTracker;
+        this.board = board; // Might want to clone it to avoid modifying the original board
+        this.pieceMovementTracker = pieceMovementTracker; // For castling situations
     }
 
     public boolean isMoveLegal(ParsedMove parsedMove, boolean playerColor) {
@@ -32,11 +32,6 @@ public class MoveValidator {
 
     private boolean checkPawnPromotion(ParsedMove parsedMove, boolean playerColor) {
         // Implement pawn promotion checks here
-        return true; // Placeholder
-    }
-
-    private boolean checkEnPassant(ParsedMove parsedMove, boolean playerColor) {
-        // Implement en passant checks here
         return true; // Placeholder
     }
 

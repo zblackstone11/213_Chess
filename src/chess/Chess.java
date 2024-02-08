@@ -36,7 +36,7 @@ class ReturnPlay {
 
 public class Chess {
 
-	// Field for the board array at class level, so that it can be accessed from any method in the class
+	// Field for the board matrix at class level, so that it can be accessed from any method in the class
 	public static ReturnPiece[][] board = new ReturnPiece[8][8];
 
 	// Field to track the current player's turn
@@ -44,6 +44,9 @@ public class Chess {
 
 	// Field to track the movement status of important pieces for castling
 	public static PieceMovementTracker pieceMovementTracker = new PieceMovementTracker();
+
+	// Might want a field for prior move here later, to check for en passant and self-check
+	public static String priorMove = null;
 
 	// Method to create a piece, since the ReturnPiece class has no constructor
 	public static ReturnPiece createPiece(ReturnPiece.PieceType pieceType, ReturnPiece.PieceFile pieceFile, int pieceRank) {
@@ -61,8 +64,8 @@ public class Chess {
 	 * @return A ReturnPlay instance that contains the result of the move.
 	 */
 	public static ReturnPlay play(String move) {
-		
-		// 1. Parse the move string into the from and to squares and the move type
+
+		// 1. Parse the move string into the from and to squares and the move type if it's explcit from the string
 		ParsedMove parsedMove = MoveParser.parseMove(move);
 		ReturnPlay returnPlay = new ReturnPlay();
 
@@ -89,31 +92,39 @@ public class Chess {
 			return returnPlay;
 		}
 		
-		// If the move is an explicit pawn promotion, return a ReturnPlay object with the appropriate message and the current board state
+		// If the move is an EXPLICIT pawn promotion, return a ReturnPlay object with the appropriate message and the current board state
 		else if (parsedMove.moveType == MoveType.PAWN_PROMOTION) {
 			// Check if the move is legal
-			// Check if the move results in check or checkmate
 			// Make move first as per the rules
+			// Check if the move results in check OR checkmate
 			// Update the board with the move
 			returnPlay.piecesOnBoard = BoardToPieceListConverter.convertToPieceList(board);
-			returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
+			returnPlay.message = null; // Could be CHECK, CHECKMATE_BLACK_WINS, CHECKMATE_WHITE_WINS, ILLEGAL_MOVE
+			// if return play message does not equal ILLEGAL_MOVE, then update the priorMove field
+			if (returnPlay.message != ReturnPlay.Message.ILLEGAL_MOVE) {
+				priorMove = move;
+			}
 			return returnPlay;
 		}
 		
-		// If the move is regular, check if the move is legal
+		// If the move is regular, check if the move is legal, will be hardest to implement
 		else if (parsedMove.moveType == MoveType.REGULAR) {
 			// Check if the move is legal
 			// Check if the move results in check or checkmate
-			// Check if it is an implicit promotion to Queen, a castle, an en passant etc
+			// Check if it is an IMPLICIT promotion to Queen, a castle, an en passant etc
 			// If castle, check the piece movement tracker to see if the king or rook has moved before
+			// If en passant, check if the previous move was a pawn double move
 			// Make move first as per the rules
 			// Update the board with the move
 			returnPlay.piecesOnBoard = BoardToPieceListConverter.convertToPieceList(board);
-			returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
+			returnPlay.message = null; // Could be CHECK, CHECKMATE_BLACK_WINS, CHECKMATE_WHITE_WINS, ILLEGAL_MOVE
+			if (returnPlay.message != ReturnPlay.Message.ILLEGAL_MOVE) {
+				priorMove = move;
+			}
 			return returnPlay;
 		}
 
-		// Otherwise an illegal move
+		// Otherwise an illegal move format was entered
 		// ReturnPlay instance with pieces on board same as previous state of the board and message as ILLEGAL_MOVE
 		else {
 			returnPlay.piecesOnBoard = BoardToPieceListConverter.convertToPieceList(board);
@@ -130,7 +141,9 @@ public class Chess {
 		BoardInitializer.initializeBoard(board);
 		// In case the game was already in progress, reset the current player to white
 		currentPlayer = Player.white;
-		// Reset the movement status of each piece
+		// Reset the movement status of each piece to false
 		pieceMovementTracker.reset();
+		// Reset the prior move to null
+		priorMove = null;
 	}
 }
