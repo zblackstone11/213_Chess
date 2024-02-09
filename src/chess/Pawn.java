@@ -15,6 +15,7 @@ public class Pawn implements Piece {
         // Need to implement this method
         // For en passant, need to check if the last move was a double move by an opponent's pawn
         // use board's Chess class's priorMove field to check if the last move was a double move by an opponent's pawn
+        // Also need to check for implicit promotion to queen, so if white and on row 7, or black and on row 1
         return null;  // Placeholder, replace with actual logic
     }
 

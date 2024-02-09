@@ -83,7 +83,6 @@ public class Chess {
 				currentPlayer = Player.white;
 			}
 			priorMove = newmove;
-			// Maybe reset the game explicitly here
 			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
 			returnPlay.message = ReturnPlay.Message.DRAW;
 			return returnPlay;
@@ -134,6 +133,5 @@ public class Chess {
 		board.resetHasMoved();;
 		// Reset the prior move to null
 		priorMove = null;
-		// Do we need to return a returnPlay object here?
 	}
 }
