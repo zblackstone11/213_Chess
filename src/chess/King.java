@@ -13,6 +13,15 @@ public class King implements Piece {
     // Implement the method to return a list of legal moves for this king
     public List<Move> getLegalMoves(Board board, Position position) {
         // Need to implement this method
+        // Should return a list of possible legal moves for the king at the given position
+        // Will need special logic to check for castling
+            // 1. If in check, cannot castle, use isCheck method if get casle input first
+            // 2. If king has moved, cannot castle, check board's hasMoved method
+            // 3. If rook has moved, cannot castle, check board's hasMoved method
+            // 4. If there are pieces between the king and rook, cannot castle, check board's getPieceAt method
+            // 5. If the king would move through check, cannot castle, use isCheck method and simulate 
+            //    the move to see if the king would be in check
+            // 6. Cannot move into check, use simulate move to see if self check
         return null;  // Placeholder, replace with actual logic
     }
 
