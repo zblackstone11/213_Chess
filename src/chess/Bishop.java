@@ -25,4 +25,9 @@ public class Bishop implements Piece {
     public Color getColor() {
         return this.color;
     }
+
+    // Method to clone the bishop
+    public Piece clonePiece() {
+        return new Bishop(this.color);
+    }
 }

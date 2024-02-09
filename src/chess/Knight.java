@@ -25,4 +25,10 @@ public class Knight implements Piece {
     public Color getColor() {
         return this.color;
     }
+
+    // Method to clone the knight
+    public Piece clonePiece() {
+        return new Knight(this.color);
+    }
+    
 }

@@ -25,4 +25,9 @@ public class Queen implements Piece {
     public Color getColor() {
         return this.color;
     }
+
+    // Method to clone the queen
+    public Piece clonePiece() {
+        return new Queen(this.color);
+    }
 }

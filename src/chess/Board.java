@@ -78,4 +78,26 @@ public class Board {
             }
         }
     }
+    public Board cloneBoard() {
+        Board clonedBoard = new Board(); // Create a new Board instance
+    
+        // Iterate over the current board and copy each piece to the new board
+        for (int row = 0; row < this.board.length; row++) {
+            for (int col = 0; col < this.board[row].length; col++) {
+                // Get the current piece from the original board
+                Piece currentPiece = this.board[row][col];
+                
+                // Clone the piece if it's not null
+                if (currentPiece != null) {
+                    clonedBoard.board[row][col] = currentPiece.clonePiece();
+                }
+            }
+        }
+        // Clone the hasMoved array
+        for (int row = 0; row < this.hasMoved.length; row++) {
+            System.arraycopy(this.hasMoved[row], 0, clonedBoard.hasMoved[row], 0, this.hasMoved[row].length);
+        }
+    
+        return clonedBoard;
+    }    
 }

@@ -22,4 +22,7 @@ public interface Piece {
 
     // Returns the color of this piece
     Color getColor();
+
+    // Returns a clone of this piece
+    public Piece clonePiece();
 }

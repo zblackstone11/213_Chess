@@ -25,4 +25,10 @@ public class Pawn implements Piece {
     public Color getColor() {
         return this.color;
     }
+
+    // Method to clone the pawn
+    public Piece clonePiece() {
+        return new Pawn(this.color);
+    }
+    
 }

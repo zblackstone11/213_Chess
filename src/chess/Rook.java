@@ -25,4 +25,8 @@ public class Rook implements Piece {
     public Color getColor() {
         return this.color;
     }
+    // Method to clone the rook
+    public Piece clonePiece() {
+        return new Rook(this.color);
+    }
 }
