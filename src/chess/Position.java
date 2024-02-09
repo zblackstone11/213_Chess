@@ -1,7 +1,7 @@
 package chess;
 
 public class Position {
-    private final int row;  // Corresponds to chess board ranks (1-8)
+    private final int row;  // Corresponds to chess board ranks (1-8), values will be 0-based
     private final int column; // Corresponds to chess board files (a-h), easier to work with than letters
 
     // Just keep in mind that it is the reverse of chess notation, where the column comes first and the row comes second

@@ -22,7 +22,7 @@ public class Board {
         }
     }
 
-    // method to initialize board with pieces in starting position
+    // method to initialize Board with pieces in starting position
     public void initializeBoard() {
         // Initialize the white rooks
         board[0][0] = new Rook(Piece.Color.WHITE);
@@ -70,7 +70,7 @@ public class Board {
     public void setHasMoved(Position position, boolean value) {
         hasMoved[position.getRow()][position.getColumn()] = value;
     }
-    // Reset hasMoved status of each piece/(known by initial square) to false
+    // Reset hasMoved status of each piece (known by initial square) to false
     public void resetHasMoved() {
         for (int i = 0; i < hasMoved.length; i++) {
             for (int j = 0; j < hasMoved[i].length; j++) {

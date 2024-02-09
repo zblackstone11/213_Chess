@@ -1,6 +1,6 @@
 package chess;
-// Only four move types that can be identified EXPLICITLY by the text input in this class
-enum MoveType { RESIGN, DRAW, REGULAR, PAWN_PROMOTION }
+
+enum MoveType { RESIGN, DRAW, REGULAR, PAWN_PROMOTION } // Only four move types that can be identified EXPLICITLY by the text input in this class
 class ParsedMove { 
     MoveType moveType;
     ReturnPiece.PieceFile startFile;
@@ -12,12 +12,12 @@ class ParsedMove {
     // Constructor to initialize fields, with default values for non-applicable fields
     public ParsedMove(MoveType moveType) {
         this.moveType = moveType;
-        this.promotionPieceType = 'x'; // Default, will be set for pawn promotions
+        this.promotionPieceType = 'x'; // Default, will be set explicitly for pawn promotions
     }
 
     // Helper method to set start and end squares
     public void setSquares(String start, String end) {
-        this.startFile = ReturnPiece.PieceFile.valueOf(start.substring(0, 1));
+        this.startFile = ReturnPiece.PieceFile.valueOf(start.substring(0, 1)); // can add .toLowerCase if we are supposed to accept uppercase input
         this.startRank = Integer.parseInt(start.substring(1));
         this.endFile = ReturnPiece.PieceFile.valueOf(end.substring(0, 1));
         this.endRank = Integer.parseInt(end.substring(1));
@@ -26,7 +26,7 @@ class ParsedMove {
     // Helper method to set promotion piece type
     public void setPromotionPieceType(char promotionChar) {
         switch (promotionChar) {
-            case 'Q':
+            case 'Q': // assumption is that we should only be accepting uppercase input
                 this.promotionPieceType = 'Q'; 
                 break;
             case 'R':
@@ -39,7 +39,7 @@ class ParsedMove {
                 this.promotionPieceType = 'N';
                 break;
             default:
-                this.promotionPieceType = 'x'; // Default, should not happen
+                throw new IllegalArgumentException("Invalid promotion piece type");
         }
     }
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ConvertBoardToReturnPieceList {
     public static ArrayList<ReturnPiece> convertToPieceList(Board board) { // Method to convert a Board of Pieces to an array list of ReturnPiece objects
-        ArrayList<ReturnPiece> pieceList = new ArrayList<>(); // Create an empty list to store ReturnPiece objects
+        ArrayList<ReturnPiece> pieceList = new ArrayList<>(); // Create an empty list to store ReturnPiece objects, return this
 
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
@@ -19,16 +19,32 @@ public class ConvertBoardToReturnPieceList {
         return pieceList;
     }
 
-    private static ReturnPiece convertPieceToReturnPiece(Piece piece, int row, int col) { // Method to convert a Piece to a ReturnPiece, might want to make public later
-        // Logic to convert a Piece to a ReturnPiece based on its type and color
-        // This will involve mapping PieceType and Color from Piece to ReturnPiece.PieceType, can use first letters of each?
-        // And converting row and col to a rank and file in that order
-        // Get the first letter of tHe Piece color and first letter of piece type, concatenate them, and cast to ReturnPiece.PieceType
-        // Wont work as is need mapping function since the enum type etc. is different
-        ReturnPiece.PieceType pieceType = ReturnPiece.PieceType.(piece.getColor().toString().charAt(0) + piece.getType().toString().charAt(0));
-        ReturnPiece.PieceFile pieceFile = ReturnPiece.PieceFile.values()[col]; // need to test this, not sure if values() works from 0 or 1 based
-        int pieceRank = row + 1; // Chess ranks are 1-based so add 1 to the row we are at in the loop
-
+    public static ReturnPiece convertPieceToReturnPiece(Piece piece, int row, int col) {
+        // Use a mapping function to get the corresponding ReturnPiece.PieceType
+        ReturnPiece.PieceType pieceType = mapPieceToReturnPieceType(piece);
+        ReturnPiece.PieceFile pieceFile = ReturnPiece.PieceFile.values()[col]; // .values() function returns an array of the enum values from index 0
+        int pieceRank = row + 1; // Convert 0-based row to 1-based rank
+    
         return CreateReturnPiece.createReturnPiece(pieceType, pieceFile, pieceRank);
     }
+    
+    public static ReturnPiece.PieceType mapPieceToReturnPieceType(Piece piece) {
+        switch (piece.getType()) {
+            case PAWN: // ternary operator to check the color of the piece and return the corresponding ReturnPiece.PieceType
+                return piece.getColor() == Piece.Color.WHITE ? ReturnPiece.PieceType.WP : ReturnPiece.PieceType.BP;
+            case ROOK: // logic is condition ? value_if_true : value_if_false
+                return piece.getColor() == Piece.Color.WHITE ? ReturnPiece.PieceType.WR : ReturnPiece.PieceType.BR;
+            case KNIGHT:
+                return piece.getColor() == Piece.Color.WHITE ? ReturnPiece.PieceType.WN : ReturnPiece.PieceType.BN;
+            case BISHOP:
+                return piece.getColor() == Piece.Color.WHITE ? ReturnPiece.PieceType.WB : ReturnPiece.PieceType.BB;
+            case QUEEN:
+                return piece.getColor() == Piece.Color.WHITE ? ReturnPiece.PieceType.WQ : ReturnPiece.PieceType.BQ;
+            case KING:
+                return piece.getColor() == Piece.Color.WHITE ? ReturnPiece.PieceType.WK : ReturnPiece.PieceType.BK;
+            default:
+                throw new IllegalArgumentException("Unknown piece type or color");
+        }
+    }
+    
 }

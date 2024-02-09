@@ -43,7 +43,7 @@ public class Chess {
 	public static Player currentPlayer = Player.white;
 
 	// We want a field for prior move here later, to check for en passant and self-check
-	public static String priorMove = null;
+	public static Move priorMove = null;
 	
 	enum Player { white, black }
 	
@@ -75,8 +75,14 @@ public class Chess {
 		else if (parsedMove.moveType == MoveType.DRAW) {
 			// Can be a regular move, a castle, an implicit pawn promotion to queen, or an en passant
 			// Check if the move is legal, only continue if it is, else return an illegal move message and the current board state
-			// Make move first as per the rules
-			// Update the board with the move
+			Move newmove = Move.convertParsedMoveToMove(parsedMove, board);
+			board = ExecuteMove.executeMove(newmove, board);
+			if (currentPlayer == Player.white) {
+				currentPlayer = Player.black;
+			} else {
+				currentPlayer = Player.white;
+			}
+			priorMove = newmove;
 			// Maybe reset the game explicitly here
 			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
 			returnPlay.message = ReturnPlay.Message.DRAW;
@@ -86,10 +92,14 @@ public class Chess {
 		// If the move is an EXPLICIT pawn promotion, return a ReturnPlay object with the appropriate message and the current board state
 		else if (parsedMove.moveType == MoveType.PAWN_PROMOTION) {
 			// Check if the move is legal, only continue if it is
-			// Make move
-			// Check if the move results in check OR checkmate
-			// Update the board with the move
-			// Update the prior move field
+			Move newmove = Move.convertParsedMoveToMove(parsedMove, board);
+			board = ExecuteMove.executeMove(newmove, board);
+			if (currentPlayer == Player.white) {
+				currentPlayer = Player.black;
+			} else {
+				currentPlayer = Player.white;
+			}
+			priorMove = newmove;
 			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
 			returnPlay.message = null; // Could be CHECK, CHECKMATE_BLACK_WINS, CHECKMATE_WHITE_WINS, ILLEGAL_MOVE
 			return returnPlay;
@@ -98,6 +108,14 @@ public class Chess {
 		// If the move is regular, check if the move is legal, will be hardest to implement
 		else /* move type must be REGULAR, only other option assuming all inputs are properly formatted */ {
 			// Can be a regular move, a castle, an implicit pawn promotion to queen, or an en passant
+			Move newmove = Move.convertParsedMoveToMove(parsedMove, board);
+			board = ExecuteMove.executeMove(newmove, board);
+			if (currentPlayer == Player.white) {
+				currentPlayer = Player.black;
+			} else {
+				currentPlayer = Player.white;
+			}
+			priorMove = newmove;
 			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
 			returnPlay.message = null; // Could be CHECK, CHECKMATE_BLACK_WINS, CHECKMATE_WHITE_WINS, ILLEGAL_MOVE
 			return returnPlay;
