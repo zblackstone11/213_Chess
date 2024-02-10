@@ -1,4 +1,5 @@
 package chess;
+import java.util.ArrayList;
 // NEEDS WORK
 import java.util.List;
 
@@ -12,8 +13,25 @@ public class Knight implements Piece {
 
     // Implement the method to return a list of legal moves for this knight
     public List<Move> getLegalMoves(Board board, Position position) {
-        // Need to implement this method
-        return null;  // Placeholder, replace with actual logic
+        List<Move> legalMoves = new ArrayList<>();
+        int[][] knightMoves = {{-2, -1}, {-2, 1}, {-1, -2}, {1, -2}, {2, -1}, {2, 1}, {-1, 2}, {1, 2}};
+
+        for (int[] move : knightMoves) { // for each 2d array in knightMoves
+            int targetRow = position.getRow() + move[0];
+            int targetCol = position.getColumn() + move[1];
+
+            // Check if the move is within the board boundaries
+            if (targetRow >= 0 && targetRow < 8 && targetCol >= 0 && targetCol < 8) {
+                Position targetPosition = new Position(targetRow, targetCol);
+                Piece targetPiece = board.getPieceAt(targetPosition);
+
+                // Check if the target square is empty or occupied by an opponent's piece
+                if (targetPiece == null || targetPiece.getColor() != this.color) {
+                    legalMoves.add(new Move(position, targetPosition, this));
+                }
+            }
+        }
+        return legalMoves;
     }
 
     // Method to return the type of this piece (KNIGHT)
