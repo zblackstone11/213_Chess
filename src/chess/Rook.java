@@ -1,4 +1,5 @@
 package chess;
+import java.util.ArrayList;
 // NEEDS WORK
 import java.util.List;
 
@@ -13,7 +14,8 @@ public class Rook implements Piece {
     // Implement the method to return a list of legal moves for this rook
     public List<Move> getLegalMoves(Board board, Position position) {
         // Need to implement this method
-        return null;  // Placeholder, replace with actual logic
+        List<Move> legalMoves = new ArrayList<>();
+        return legalMoves;
     }
 
     // Method to return the type of this piece (ROOK)

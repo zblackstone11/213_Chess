@@ -1,4 +1,5 @@
 package chess;
+import java.util.ArrayList;
 // NEEDS WORK
 import java.util.List;
 
@@ -22,7 +23,8 @@ public class King implements Piece {
             // 5. If the king would move through check, cannot castle, use isCheck method and simulate 
             //    the move to see if the king would be in check
             // 6. Cannot move into check, use simulate move to see if self check
-        return null;  // Placeholder, replace with actual logic
+        List<Move> legalMoves = new ArrayList<>();
+        return legalMoves;
     }
 
     // Method to return the type of this piece (KING)

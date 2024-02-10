@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.ArrayList;
+import java.util.List;
 
 class ReturnPiece {
 	static enum PieceType {WP, WR, WN, WB, WQ, WK, 
@@ -38,10 +39,8 @@ public class Chess {
 
 	// Field for the Board matrix at class level, so that it can be accessed from any method in the class/package
 	public static Board board = new Board();
-
 	// Field to track the current player's turn, update after each move
 	public static Player currentPlayer = Player.white;
-
 	// We want a field for prior move here later, to check for en passant and self-check
 	public static Move priorMove = null;
 	
@@ -59,7 +58,6 @@ public class Chess {
 		ReturnPlay returnPlay = new ReturnPlay(); // holder for the return value
 
 		// If the move is a resignation, return a ReturnPlay object with the appropriate message and the current board state
-		// Fully implemented as is
 		if (parsedMove.moveType == MoveType.RESIGN) {
 			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
 		
@@ -71,52 +69,108 @@ public class Chess {
 			return returnPlay;
 		}
 
-		// If the move is a draw, return a ReturnPlay object with the appropriate message and the current board state
-		else if (parsedMove.moveType == MoveType.DRAW) {
-			// Can be a regular move, a castle, an implicit pawn promotion to queen, or an en passant
-			// Check if the move is legal, only continue if it is, else return an illegal move message and the current board state
-			Move newmove = Move.convertParsedMoveToMove(parsedMove, board);
-			board = ExecuteMove.executeMove(newmove, board);
-			if (currentPlayer == Player.white) {
-				currentPlayer = Player.black;
-			} else {
-				currentPlayer = Player.white;
-			}
-			priorMove = newmove;
-			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
-			returnPlay.message = ReturnPlay.Message.DRAW;
-			return returnPlay;
-		}
-		
 		// If the move is an EXPLICIT pawn promotion, return a ReturnPlay object with the appropriate message and the current board state
 		else if (parsedMove.moveType == MoveType.PAWN_PROMOTION) {
-			// Check if the move is legal, only continue if it is
-			Move newmove = Move.convertParsedMoveToMove(parsedMove, board);
-			board = ExecuteMove.executeMove(newmove, board);
-			if (currentPlayer == Player.white) {
-				currentPlayer = Player.black;
-			} else {
-				currentPlayer = Player.white;
-			}
-			priorMove = newmove;
-			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
-			returnPlay.message = null; // Could be CHECK, CHECKMATE_BLACK_WINS, CHECKMATE_WHITE_WINS, ILLEGAL_MOVE
+			// Fill in the code to handle pawn promotion
 			return returnPlay;
 		}
-		
-		// If the move is regular, check if the move is legal, will be hardest to implement
-		else /* move type must be REGULAR, only other option assuming all inputs are properly formatted */ {
-			// Can be a regular move, a castle, an implicit pawn promotion to queen, or an en passant
+
+		// If the move is a draw, return a ReturnPlay object with the appropriate message and the current board state
+		else if (parsedMove.moveType == MoveType.DRAW) {
+			// Generate the move object from the parsed move
 			Move newmove = Move.convertParsedMoveToMove(parsedMove, board);
-			board = ExecuteMove.executeMove(newmove, board);
-			if (currentPlayer == Player.white) {
-				currentPlayer = Player.black;
-			} else {
-				currentPlayer = Player.white;
+			// Get the piece at the start position of the move
+			Piece movingPiece = board.getPieceAt(newmove.getStartPosition());			
+			// Get the list of legal moves for the piece at the start position
+			List<Move> legalMoves = movingPiece.getLegalMoves(board, newmove.getStartPosition());			
+			// Check if the newmove is in the list of legal moves
+			boolean isTentativelyLegal = legalMoves.contains(newmove);			
+			if (!isTentativelyLegal) {
+				// If the move is not tentatively legal, return ILLEGAL_MOVE
+				returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
+				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
+				return returnPlay;
+			}		
+			// If the move is tentatively legal, check for self-check
+			boolean resultsInSelfCheck = !SelfCheckSimulator.simulateMove(board, newmove);
+			if (resultsInSelfCheck) {
+				// If the move results in self-check, return ILLEGAL_MOVE
+				returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
+				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
+				return returnPlay;
 			}
-			priorMove = newmove;
+			// If the move is tentatively legal and does not result in self-check, execute the move
+			board = ExecuteMove.executeMove(newmove, board);
+			currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white; // Switch turn
+			priorMove = newmove; // Update prior move
 			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
-			returnPlay.message = null; // Could be CHECK, CHECKMATE_BLACK_WINS, CHECKMATE_WHITE_WINS, ILLEGAL_MOVE
+			// Assuming the move has been executed and currentPlayer has been updated
+			Piece.Color opponentColor = (currentPlayer == Player.white) ? Piece.Color.BLACK : Piece.Color.WHITE;
+			// Check if the move has put the opponent's king in check
+			if (IsCheck.isCheck(board, opponentColor)) {
+				// If the opponent's king is in check, check for checkmate
+				if (IsCheck.isCheckmate(board, opponentColor)) {
+					// If it's checkmate, set the message accordingly
+					returnPlay.message = (opponentColor == Piece.Color.WHITE) ? ReturnPlay.Message.CHECKMATE_BLACK_WINS : ReturnPlay.Message.CHECKMATE_WHITE_WINS;
+				} else {
+					// If it's just check and not checkmate, set the message to CHECK
+					returnPlay.message = ReturnPlay.Message.CHECK;
+				}
+			} else {
+				returnPlay.message = ReturnPlay.Message.DRAW;
+			}
+			// Continue with setting pieces on board and returning returnPlay
+			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
+			return returnPlay; // Correctly placed return statement
+		}
+		
+		// If the move is regular, check if the move is tentatively legal and doesn't result in self-check
+		else { /* move type must be REGULAR, only other option assuming all inputs are properly formatted */
+			// Can be a regular move, a castle, an implicit pawn promotion to queen, or an en passant for special moves
+			// Generate the move object from the parsed move
+			Move newmove = Move.convertParsedMoveToMove(parsedMove, board);
+			// Get the piece at the start position of the move
+			Piece movingPiece = board.getPieceAt(newmove.getStartPosition());
+			// Get the list of legal moves for the piece at the start position
+			List<Move> legalMoves = movingPiece.getLegalMoves(board, newmove.getStartPosition());
+			// Check if the newmove is in the list of legal moves
+			boolean isTentativelyLegal = legalMoves.contains(newmove);
+			if (!isTentativelyLegal) {
+				// If the move is not tentatively legal, return ILLEGAL_MOVE
+				returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
+				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
+				return returnPlay;
+			}
+			// If the move is tentatively legal, check for self-check
+			boolean resultsInSelfCheck = !SelfCheckSimulator.simulateMove(board, newmove);
+			if (resultsInSelfCheck) {
+				// If the move results in self-check, return ILLEGAL_MOVE
+				returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
+				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
+				return returnPlay;
+			}
+			// If the move is tentatively legal and does not result in self-check, execute the move
+			board = ExecuteMove.executeMove(newmove, board);
+			currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white; // Switch turn
+			priorMove = newmove; // Update prior move
+			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
+			// Assuming the move has been executed and currentPlayer has been updated
+			Piece.Color opponentColor = (currentPlayer == Player.white) ? Piece.Color.BLACK : Piece.Color.WHITE;
+			// Check if the move has put the opponent's king in check
+			if (IsCheck.isCheck(board, opponentColor)) {
+				// If the opponent's king is in check, check for checkmate
+				if (IsCheck.isCheckmate(board, opponentColor)) {
+					// If it's checkmate, set the message accordingly
+					returnPlay.message = (opponentColor == Piece.Color.WHITE) ? ReturnPlay.Message.CHECKMATE_BLACK_WINS : ReturnPlay.Message.CHECKMATE_WHITE_WINS;
+				} else {
+					// If it's just check and not checkmate, set the message to CHECK
+					returnPlay.message = ReturnPlay.Message.CHECK;
+				}
+			} else {
+				returnPlay.message = null;
+			}
+			// Continue with setting pieces on board and returning returnPlay
+			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
 			return returnPlay;
 		}
 	}

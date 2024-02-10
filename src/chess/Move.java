@@ -39,4 +39,24 @@ public class Move {
     
         return move;
     }    
+    // Override the equals method to compare two Move objects
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+    
+        Move otherMove = (Move) obj;
+    
+        // Directly compare the row and column of startPosition and endPosition
+        boolean positionsEqual = this.startPosition.getRow() == otherMove.startPosition.getRow() &&
+                                 this.startPosition.getColumn() == otherMove.startPosition.getColumn() &&
+                                 this.endPosition.getRow() == otherMove.endPosition.getRow() &&
+                                 this.endPosition.getColumn() == otherMove.endPosition.getColumn();
+    
+        boolean piecesEqual = this.pieceMoved != null && otherMove.pieceMoved != null &&
+                              this.pieceMoved.getType() == otherMove.pieceMoved.getType() &&
+                              this.pieceMoved.getColor() == otherMove.pieceMoved.getColor();
+    
+        return positionsEqual && piecesEqual;
+    }
+    
 }
