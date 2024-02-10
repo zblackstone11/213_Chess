@@ -75,7 +75,7 @@ public class Chess {
 			return returnPlay;
 		}
 
-		// If the move is a draw, return a ReturnPlay object with the appropriate message and the current board state
+		// If the move is a draw
 		else if (parsedMove.moveType == MoveType.DRAW) {
 			// Generate the move object from the parsed move
 			Move newmove = Move.convertParsedMoveToMove(parsedMove, board);
@@ -93,19 +93,18 @@ public class Chess {
 			}		
 			// If the move is tentatively legal, check for self-check
 			boolean resultsInSelfCheck = !SelfCheckSimulator.simulateMove(board, newmove);
-			if (resultsInSelfCheck) {
+			if (resultsInSelfCheck) { // NEED TO TEST THIS, MIGHT HAVE IT BACKWARDS?
 				// If the move results in self-check, return ILLEGAL_MOVE
 				returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
 				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
 				return returnPlay;
 			}
-			// If the move is tentatively legal and does not result in self-check, execute the move
+			// If the move is tentatively legal AND does not result in self-check, execute the move
 			board = ExecuteMove.executeMove(newmove, board);
-			currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white; // Switch turn
 			priorMove = newmove; // Update prior move
-			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
-			// Assuming the move has been executed and currentPlayer has been updated
+			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board); // may be redundant with same code below
 			Piece.Color opponentColor = (currentPlayer == Player.white) ? Piece.Color.BLACK : Piece.Color.WHITE;
+			currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white; // Switch turn
 			// Check if the move has put the opponent's king in check
 			if (IsCheck.isCheck(board, opponentColor)) {
 				// If the opponent's king is in check, check for checkmate
@@ -121,12 +120,11 @@ public class Chess {
 			}
 			// Continue with setting pieces on board and returning returnPlay
 			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
-			return returnPlay; // Correctly placed return statement
+			return returnPlay;
 		}
 		
 		// If the move is regular, check if the move is tentatively legal and doesn't result in self-check
 		else { /* move type must be REGULAR, only other option assuming all inputs are properly formatted */
-			// Can be a regular move, a castle, an implicit pawn promotion to queen, or an en passant for special moves
 			// Generate the move object from the parsed move
 			Move newmove = Move.convertParsedMoveToMove(parsedMove, board);
 			// Get the piece at the start position of the move
@@ -149,13 +147,12 @@ public class Chess {
 				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
 				return returnPlay;
 			}
-			// If the move is tentatively legal and does not result in self-check, execute the move
+			// If the move is tentatively legal AND does not result in self-check, execute the move
 			board = ExecuteMove.executeMove(newmove, board);
-			currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white; // Switch turn
 			priorMove = newmove; // Update prior move
 			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
-			// Assuming the move has been executed and currentPlayer has been updated
 			Piece.Color opponentColor = (currentPlayer == Player.white) ? Piece.Color.BLACK : Piece.Color.WHITE;
+			currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white; // Switch turn
 			// Check if the move has put the opponent's king in check
 			if (IsCheck.isCheck(board, opponentColor)) {
 				// If the opponent's king is in check, check for checkmate

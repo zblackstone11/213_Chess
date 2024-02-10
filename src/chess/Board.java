@@ -93,11 +93,13 @@ public class Board {
                 }
             }
         }
-        // Clone the hasMoved array
+        // Copy the hasMoved status of each piece to the new board
         for (int row = 0; row < this.hasMoved.length; row++) {
-            System.arraycopy(this.hasMoved[row], 0, clonedBoard.hasMoved[row], 0, this.hasMoved[row].length);
+            for (int col = 0; col < this.hasMoved[row].length; col++) {
+                clonedBoard.hasMoved[row][col] = this.hasMoved[row][col];
+            }
         }
-    
+
         return clonedBoard;
     }    
 }

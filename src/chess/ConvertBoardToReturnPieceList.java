@@ -9,7 +9,7 @@ public class ConvertBoardToReturnPieceList {
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 Piece currentPiece = board.getPieceAt(new Position(row, col));
-                if (currentPiece != null) { // don't add null pieces to the list
+                if (currentPiece != null) {
                     // Convert the Piece object to a ReturnPiece object
                     ReturnPiece returnPiece = convertPieceToReturnPiece(currentPiece, row, col);
                     pieceList.add(returnPiece);
