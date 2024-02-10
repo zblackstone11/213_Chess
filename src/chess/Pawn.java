@@ -11,14 +11,14 @@ public class Pawn implements Piece {
         this.color = color;
     }
 
-    // Implement the method to return a list of legal moves for this pawn
+    // method to return a list of legal moves for this pawn
     public List<Move> getLegalMoves(Board board, Position position) {
         // For en passant, need to check if the last move was a double move by an opponent's pawn
-        // use board's Chess class's priorMove field to check if the last move was a double move by an opponent's pawn
+        // use Chess class's priorMove field to check if the last move was a double move by an opponent's pawn
         // Also need to check for promotion to queen, so if white and on row 7, or black and on row 1?
-        // might just wanna do that part elsewhere though
+        // might just wanna do that part elsewhere though... but probably here
         List<Move> legalMoves = new ArrayList<>();
-        int direction = (this.color == Color.WHITE) ? 1 : -1; // Corrected direction: White pawns move up (increase row), black pawns move down (decrease row)
+        int direction = (this.color == Color.WHITE) ? 1 : -1; // White pawns move up (increase row), black pawns move down (decrease row)
 
         // Single square forward move
         Position oneStepForward = new Position(position.getRow() + direction, position.getColumn());

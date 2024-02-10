@@ -8,7 +8,7 @@ public class SelfCheckSimulator {
         Board clonedBoard = board.cloneBoard();
         // Make the move on the cloned board
         clonedBoard = ExecuteMove.executeMove(move, clonedBoard);
-        // Run isCheck on the cloned board to see if the move is illegal (results in self-check), or if still in check after the move
-        return !IsCheck.isCheck(clonedBoard, move.getPieceMoved().getColor()); // false means illegal move
+        // Run isCheck on the cloned board to see if the move is illegal (1.results in self-check), or 2. if still in check after the move
+        return !IsCheck.isCheck(clonedBoard, move.getPieceMoved().getColor()); // false means illegal move (self-check) or still in check?
     }
 }

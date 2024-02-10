@@ -11,7 +11,7 @@ public class Queen implements Piece {
         this.color = color;
     }
 
-    // Implement the method to return a list of legal moves for this queen
+    // method to return a list of legal moves for this queen
     public List<Move> getLegalMoves(Board board, Position position) {
         List<Move> legalMoves = new ArrayList<>();
         // Combines the directions of both Rook and Bishop

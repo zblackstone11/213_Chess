@@ -42,7 +42,8 @@ public class IsCheck {
                 }
             }
         }
-        return null; // should never happen
+        // return error message if the king is not found
+        return null; // this should never happen
     }
 
     // method to check if the king of the given color is in checkmate
@@ -51,15 +52,15 @@ public class IsCheck {
         if (!isCheck(board, color)) {
             return false;
         }
-        // Iterate through the board to find the pieces of the given color
+        // Iterate through the board to find the pieces of the same color as the king
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 Position position = new Position(row, col);
                 Piece piece = board.getPieceAt(position);
                 if (piece != null && piece.getColor() == color) {
-                    // Check if any of the pieces of the given color have a legal move that gets them out of check (like blocking the attack or capturing the attacking piece)
+                    // Check if any of the pieces of the given color have a legal move that gets King out of check (like blocking the attack or capturing the attacking piece)
                     for (Move move : piece.getLegalMoves(board, position)) {
-                        if (SelfCheckSimulator.simulateMove(board, new Move(position, move.getEndPosition(), piece))) {
+                        if (SelfCheckSimulator.simulateMove(board, new Move(position, move.getEndPosition(), piece))) { // double check the logic here, its pretty complicated 
                             return false;
                         }
                     }

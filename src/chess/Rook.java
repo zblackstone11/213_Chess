@@ -11,7 +11,7 @@ public class Rook implements Piece {
         this.color = color;
     }
 
-    // Implement the method to return a list of legal moves for this rook
+    // method to return a list of legal moves for this rook
     public List<Move> getLegalMoves(Board board, Position position) {
         List<Move> legalMoves = new ArrayList<>();
         int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}; // Represents up, down, right, and left

@@ -11,7 +11,7 @@ public class King implements Piece {
         this.color = color;
     }
 
-    // Implement the method to return a list of legal moves for this king
+    // method to return a list of legal moves for this king
     public List<Move> getLegalMoves(Board board, Position position) {
         List<Move> legalMoves = new ArrayList<>();
         // Directions the King can move: horizontally, vertically, and diagonally, one square
@@ -28,7 +28,7 @@ public class King implements Piece {
                 Position targetPosition = new Position(targetRow, targetCol);
                 Piece targetPiece = board.getPieceAt(targetPosition);
 
-                // The King can move to the target square if it's empty or occupied by an opponent's piece
+                // The King can (tentatively) move to the target square if it's empty or occupied by an opponent's piece
                 if (targetPiece == null || targetPiece.getColor() != this.color) {
                     legalMoves.add(new Move(position, targetPosition, this));
                 }

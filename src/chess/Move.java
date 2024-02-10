@@ -39,7 +39,7 @@ public class Move {
     
         return move;
     }    
-    // Override the equals method to compare two Move objects
+    // Override the equals method to compare two Move objects, used in the another method
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;

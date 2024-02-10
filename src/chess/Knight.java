@@ -11,10 +11,10 @@ public class Knight implements Piece {
         this.color = color;
     }
 
-    // Implement the method to return a list of legal moves for this knight
+    // method to return a list of legal moves for this knight
     public List<Move> getLegalMoves(Board board, Position position) {
         List<Move> legalMoves = new ArrayList<>();
-        int[][] knightMoves = {{-2, -1}, {-2, 1}, {-1, -2}, {1, -2}, {2, -1}, {2, 1}, {-1, 2}, {1, 2}};
+        int[][] knightMoves = {{-2, -1}, {-2, 1}, {-1, -2}, {1, -2}, {2, -1}, {2, 1}, {-1, 2}, {1, 2}}; // explicitly enumerated 8 moves
 
         for (int[] move : knightMoves) { // for each 2d array in knightMoves
             int targetRow = position.getRow() + move[0];
