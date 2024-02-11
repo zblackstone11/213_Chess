@@ -6,7 +6,7 @@ import java.util.List;
 public class King implements Piece {
     private final Color color; // The color of the KING
 
-    // Constructor to initialize the pawn with its color
+    // Constructor to initialize the king with its color
     public King(Color color) {
         this.color = color;
     }
@@ -16,8 +16,8 @@ public class King implements Piece {
         List<Move> legalMoves = new ArrayList<>();
         // Directions the King can move: horizontally, vertically, and diagonally, one square
         int[][] directions = {
-            {1, 0}, {-1, 0}, {0, 1}, {0, -1},  // Horizontal and vertical
-            {1, 1}, {1, -1}, {-1, 1}, {-1, -1} // Diagonal
+            {1, 0}, {-1, 0}, {0, 1}, {0, -1},  // Horizontal and vertical vectors
+            {1, 1}, {1, -1}, {-1, 1}, {-1, -1} // Diagonal vectors
         };
         for (int[] direction : directions) {
             int targetRow = position.getRow() + direction[0];
@@ -29,6 +29,7 @@ public class King implements Piece {
                 Piece targetPiece = board.getPieceAt(targetPosition);
 
                 // The King can (tentatively) move to the target square if it's empty or occupied by an opponent's piece
+                // wonder if we need logic for only king and king on board being drawn...
                 if (targetPiece == null || targetPiece.getColor() != this.color) {
                     legalMoves.add(new Move(position, targetPosition, this));
                 }

@@ -22,7 +22,7 @@ public class ConvertBoardToReturnPieceList {
     public static ReturnPiece convertPieceToReturnPiece(Piece piece, int row, int col) {
         // Use a mapping function to get the corresponding ReturnPiece.PieceType
         ReturnPiece.PieceType pieceType = mapPieceToReturnPieceType(piece);
-        ReturnPiece.PieceFile pieceFile = ReturnPiece.PieceFile.values()[col]; // .values() function returns an array of the enum values from index 0
+        ReturnPiece.PieceFile pieceFile = ReturnPiece.PieceFile.values()[col]; // .values() function returns an array of the enum values from index 0, col corresponds to the column index of letters
         int pieceRank = row + 1; // Convert 0-based row to 1-based rank
     
         return CreateReturnPiece.createReturnPiece(pieceType, pieceFile, pieceRank);
@@ -46,5 +46,4 @@ public class ConvertBoardToReturnPieceList {
                 throw new IllegalArgumentException("Unknown piece type or color");
         }
     }
-    
 }

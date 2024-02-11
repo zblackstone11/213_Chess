@@ -6,7 +6,7 @@ import java.util.List;
 public class Knight implements Piece {
     private final Color color; // The color of the knight
 
-    // Constructor to initialize the pawn with its color
+    // Constructor to initialize the knight with its color
     public Knight(Color color) {
         this.color = color;
     }
@@ -16,9 +16,9 @@ public class Knight implements Piece {
         List<Move> legalMoves = new ArrayList<>();
         int[][] knightMoves = {{-2, -1}, {-2, 1}, {-1, -2}, {1, -2}, {2, -1}, {2, 1}, {-1, 2}, {1, 2}}; // explicitly enumerated 8 moves
 
-        for (int[] move : knightMoves) { // for each 2d array in knightMoves
-            int targetRow = position.getRow() + move[0];
-            int targetCol = position.getColumn() + move[1];
+        for (int[] move : knightMoves) { // for each vector in knightMoves
+            int targetRow = position.getRow() + move[0]; // vertical component of the move
+            int targetCol = position.getColumn() + move[1]; // horizontal component of the move
 
             // Check if the move is within the board boundaries
             if (targetRow >= 0 && targetRow < 8 && targetCol >= 0 && targetCol < 8) {

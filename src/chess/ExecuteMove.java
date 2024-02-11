@@ -15,7 +15,7 @@ public class ExecuteMove {
         board.removePieceAt(move.getEndPosition());
         // Then set the piece at the end position to the piece that was moved
         board.setPieceAt(move.getEndPosition(), move.getPieceMoved());
-        // Need Special logic for pawn promotion, castling, check, checkmate, and en passant
+        // Need Special logic for pawn promotion, castling and en passant but maybe best left elsewhere??**
 
         // Update the hasMoved matrix for the piece that was moved
         // Check if the starting position of the move is false in the matrix, and update to true if it is

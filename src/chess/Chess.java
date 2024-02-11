@@ -37,7 +37,7 @@ class ReturnPlay {
 
 public class Chess {
 
-	// Field for the Board matrix at class level, so that it can be accessed from any method in the class/package
+	// Field for the Board matrix at class level, so it can be accessed from anywhere in the class
 	public static Board board = new Board();
 	// Field to track the current player's turn, update after each move
 	public static Player currentPlayer = Player.white;
@@ -86,14 +86,15 @@ public class Chess {
 			// Check if the newmove is in the list of legal moves
 			boolean isTentativelyLegal = legalMoves.contains(newmove);			
 			if (!isTentativelyLegal) {
-				// If the move is not tentatively legal, return ILLEGAL_MOVE
+				// If the move is not even tentatively legal, return ILLEGAL_MOVE
 				returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
 				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
 				return returnPlay;
 			}		
-			// If the move is tentatively legal, check for self-check
-			boolean resultsInSelfCheck = !SelfCheckSimulator.simulateMove(board, newmove);
-			if (resultsInSelfCheck) { // NEED TO TEST THIS, MIGHT HAVE IT BACKWARDS?
+			// If the move is tentatively legal, check if it results in self-check
+			 // result of the simulation is true if the move is illegal, false if the move is legal
+			boolean resultsInSelfCheck = SelfCheckSimulator.simulateMove(board, newmove);
+			if (resultsInSelfCheck) { 
 				// If the move results in self-check, return ILLEGAL_MOVE
 				returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
 				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
@@ -101,22 +102,22 @@ public class Chess {
 			}
 			// If the move is tentatively legal AND does not result in self-check, execute the move
 			board = ExecuteMove.executeMove(newmove, board);
-			priorMove = newmove; // Update prior move
-			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board); // may be redundant with same code below
+			priorMove = newmove; // Update prior move for potential en passant that occurs later in the game
+			// returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board); // may be redundant with same code below
 			Piece.Color opponentColor = (currentPlayer == Player.white) ? Piece.Color.BLACK : Piece.Color.WHITE;
-			currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white; // Switch turn
+			currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white; // Switch turn now that we saved the prior move info
 			// Check if the move has put the opponent's king in check
 			if (IsCheck.isCheck(board, opponentColor)) {
 				// If the opponent's king is in check, check for checkmate
 				if (IsCheck.isCheckmate(board, opponentColor)) {
-					// If it's checkmate, set the message accordingly
+					// If it's checkmate and opponent color is white, black wins, and vice versa
 					returnPlay.message = (opponentColor == Piece.Color.WHITE) ? ReturnPlay.Message.CHECKMATE_BLACK_WINS : ReturnPlay.Message.CHECKMATE_WHITE_WINS;
 				} else {
 					// If it's just check and not checkmate, set the message to CHECK
 					returnPlay.message = ReturnPlay.Message.CHECK;
 				}
 			} else {
-				returnPlay.message = ReturnPlay.Message.DRAW;
+				returnPlay.message = ReturnPlay.Message.DRAW; // else it's a draw
 			}
 			// Continue with setting pieces on board and returning returnPlay
 			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
@@ -134,14 +135,14 @@ public class Chess {
 			// Check if the newmove is in the list of legal moves
 			boolean isTentativelyLegal = legalMoves.contains(newmove);
 			if (!isTentativelyLegal) {
-				// If the move is not tentatively legal, return ILLEGAL_MOVE
+				// If the move is not even tentatively legal, return ILLEGAL_MOVE
 				returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
 				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
 				return returnPlay;
 			}
 			// If the move is tentatively legal, check for self-check
-			boolean resultsInSelfCheck = !SelfCheckSimulator.simulateMove(board, newmove);
-			if (resultsInSelfCheck) {
+			boolean resultsInSelfCheck = SelfCheckSimulator.simulateMove(board, newmove);
+			if (resultsInSelfCheck) { 
 				// If the move results in self-check, return ILLEGAL_MOVE
 				returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
 				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
@@ -150,7 +151,7 @@ public class Chess {
 			// If the move is tentatively legal AND does not result in self-check, execute the move
 			board = ExecuteMove.executeMove(newmove, board);
 			priorMove = newmove; // Update prior move
-			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
+			// returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
 			Piece.Color opponentColor = (currentPlayer == Player.white) ? Piece.Color.BLACK : Piece.Color.WHITE;
 			currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white; // Switch turn
 			// Check if the move has put the opponent's king in check

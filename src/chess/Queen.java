@@ -16,8 +16,8 @@ public class Queen implements Piece {
         List<Move> legalMoves = new ArrayList<>();
         // Combines the directions of both Rook and Bishop
         int[][] directions = {
-            {1, 0}, {-1, 0}, {0, 1}, {0, -1},  // Rook's horizontal and vertical directions
-            {1, 1}, {1, -1}, {-1, 1}, {-1, -1} // Bishop's diagonal directions
+            {1, 0}, {-1, 0}, {0, 1}, {0, -1},  // Rook's horizontal and vertical vectors
+            {1, 1}, {1, -1}, {-1, 1}, {-1, -1} // Bishop's diagonal vectors
         };
 
         for (int[] direction : directions) {
