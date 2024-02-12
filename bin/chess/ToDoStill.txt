@@ -1,0 +1,2 @@
+Still need castling (should do in the King class probably?), en passant (in pawn class probably?), and promotion at least
+Also will need to stop the error occuring when we try to execute a move on a null space on the board
