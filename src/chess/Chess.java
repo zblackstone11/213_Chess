@@ -80,7 +80,13 @@ public class Chess {
 			// Generate the move object from the parsed move
 			Move newmove = Move.convertParsedMoveToMove(parsedMove, board);
 			// Get the piece at the start position of the move
-			Piece movingPiece = board.getPieceAt(newmove.getStartPosition());			
+			Piece movingPiece = board.getPieceAt(newmove.getStartPosition());
+			// Check if there is no piece at the start position
+			if (movingPiece == null) {
+				returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
+				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
+				return returnPlay; // Immediately return, indicating an illegal move due to selecting an empty square
+			}
 			// Get the list of legal moves for the piece at the start position
 			List<Move> legalMoves = movingPiece.getLegalMoves(board, newmove.getStartPosition());			
 			// Check if the newmove is in the list of legal moves
@@ -131,6 +137,12 @@ public class Chess {
 			// Get the piece at the start position of the move
 			Piece movingPiece = board.getPieceAt(newmove.getStartPosition());
 			// Get the list of legal moves for the piece at the start position
+			// Check if there is no piece at the start position
+			if (movingPiece == null) {
+				returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
+				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
+				return returnPlay; // Immediately return, indicating an illegal move due to selecting an empty square
+			}
 			List<Move> legalMoves = movingPiece.getLegalMoves(board, newmove.getStartPosition());
 			// Check if the newmove is in the list of legal moves
 			boolean isTentativelyLegal = legalMoves.contains(newmove);
