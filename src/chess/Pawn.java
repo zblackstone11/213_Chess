@@ -59,7 +59,7 @@ public class Pawn implements Piece {
                         Position left = new Position(position.getRow(), position.getColumn() - 1);
                         if (left.equals(priorMove.getEndPosition())) {
                             Position enPassantMovePos = new Position(position.getRow() + (this.color == Color.WHITE ? 1 : -1), priorMove.getEndPosition().getColumn());
-                            Position capturedPawnPosition = new Position(position.getRow(), priorMove.getEndPosition().getColumn());
+                            Position capturedPawnPosition = priorMove.getEndPosition(); // The position of the pawn to be captured
                             legalMoves.add(new Move(position, enPassantMovePos, this, true, capturedPawnPosition));
                         }
                     }
@@ -68,7 +68,7 @@ public class Pawn implements Piece {
                         Position right = new Position(position.getRow(), position.getColumn() + 1);
                         if (right.equals(priorMove.getEndPosition())) {
                             Position enPassantMovePos = new Position(position.getRow() + (this.color == Color.WHITE ? 1 : -1), priorMove.getEndPosition().getColumn());
-                            Position capturedPawnPosition = new Position(position.getRow(), priorMove.getEndPosition().getColumn());
+                            Position capturedPawnPosition = priorMove.getEndPosition(); // The position of the pawn to be captured
                             legalMoves.add(new Move(position, enPassantMovePos, this, true, capturedPawnPosition));
                         }
                     }
