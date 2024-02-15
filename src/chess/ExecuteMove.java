@@ -11,17 +11,30 @@ public class ExecuteMove {
     public static Board executeMove(Move move, Board board) {
         // Execute the move by first removing the piece from the start position
         board.removePieceAt(move.getStartPosition());
-        // Then remove the piece from the end position if there is one
-        board.removePieceAt(move.getEndPosition());
-        // Then set the piece at the end position to the piece that was moved
-        board.setPieceAt(move.getEndPosition(), move.getPieceMoved());
-        // Need Special logic for pawn promotion, castling and en passant but maybe best left elsewhere??**
 
-        // Update the hasMoved matrix for the piece that was moved
-        // Check if the starting position of the move is false in the matrix, and update to true if it is
-        if (!board.getHasMoved(move.getStartPosition())) {
-            board.setHasMoved(move.getStartPosition(), true);
+        // Check if this is a castling move by checking if the move has rook start and end positions
+        if (move.getRookStartPosition() != null && move.getRookEndPosition() != null) {
+            // Execute the castling move for the king
+            board.setPieceAt(move.getEndPosition(), move.getPieceMoved());
+            board.setHasMoved(move.getEndPosition(), true);
+
+            // Move the rook as part of the castling move
+            Piece rook = board.getPieceAt(move.getRookStartPosition());
+            board.removePieceAt(move.getRookStartPosition());
+            board.setPieceAt(move.getRookEndPosition(), rook);
+            board.setHasMoved(move.getRookEndPosition(), true);
+        } else {
+            // For regular moves, remove the piece from the end position if there is one
+            board.removePieceAt(move.getEndPosition());
+            // Then set the piece at the end position to the piece that was moved
+            board.setPieceAt(move.getEndPosition(), move.getPieceMoved());
+            // Update the hasMoved matrix for the piece that was moved
+            board.setHasMoved(move.getEndPosition(), true);
         }
+
+        // Update the hasMoved status for the piece that was moved
+        board.setHasMoved(move.getStartPosition(), true);
+
         return board;
     }
 }

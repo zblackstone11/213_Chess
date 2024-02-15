@@ -30,6 +30,27 @@ public class IsCheck {
         return false;
     }
 
+        // New method to check if the king is in check without considering the opposing king
+        public static boolean isCheckWithoutKing(Board board, Position kingPosition, Piece.Color color) {
+            // Iterate through the board to find the pieces of the opposite color, excluding the king
+            for (int row = 0; row < 8; row++) {
+                for (int col = 0; col < 8; col++) {
+                    Position position = new Position(row, col);
+                    Piece piece = board.getPieceAt(position);
+                    // Exclude the king from the pieces being checked
+                    if (piece != null && piece.getColor() != color && piece.getType() != Piece.PieceType.KING) {
+                        // Check if the piece can attack the king by iterating through its legal moves
+                        for (Move move : piece.getLegalMoves(board, position)) {
+                            if (move.getEndPosition().getRow() == kingPosition.getRow() && move.getEndPosition().getColumn() == kingPosition.getColumn()) {
+                                return true; // The king is in check by a piece other than the opposing king
+                            }
+                        }
+                    }
+                }
+            }
+            return false; // The king is not in check by any piece other than the opposing king
+        }
+
     // method to find the position of the king of the given color
     private static Position findKingPosition(Board board, Piece.Color color) {
         for (int row = 0; row < 8; row++) {

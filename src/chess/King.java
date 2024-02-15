@@ -1,6 +1,6 @@
 package chess;
 import java.util.ArrayList;
-// NEEDS WORK
+// NEEDS WORK FOR CASTLING
 import java.util.List;
 
 public class King implements Piece {
@@ -35,14 +35,97 @@ public class King implements Piece {
                 }
             }
         }
-               // Will need special logic to check for castling
-            // 1. If in check, cannot castle, use isCheck method if get casle input first
-            // 2. If king has moved, cannot castle, check board's hasMoved method
-            // 3. If rook has moved, cannot castle, check board's hasMoved method
-            // 4. If there are pieces between the king and rook, cannot castle, check board's getPieceAt method
-            // 5. If the king would move through check, cannot castle, use isCheck method and simulate 
-            //    the move to see if the king would be in check
-            // 6. Cannot move into check, use simulate move to see if self check
+        // Castling logic NEEDS HELP
+        // Determine the row based on the king's color
+        int kingRow = (this.color == Color.WHITE) ? 0 : 7;
+        if (!IsCheck.isCheckWithoutKing(board, new Position(kingRow, 4), this.color)) {
+            // Logic for white king first
+            if (this.color == Color.WHITE) {
+                // Logic for white king side castle
+                if (!board.getHasMoved(new Position(0, 4)) && !board.getHasMoved(new Position(0, 7))) {
+                    // New position for adjacent square to the right of the king
+                    Position rightOfKing = new Position(0, 5);
+                    Position rightOfRightOfKing = new Position(0, 6);
+                    Position kingPosition = new Position(0, 4);
+                    Position rookPosition = new Position(0, 7);
+                    if (board.getPieceAt(rightOfKing) == null && board.getPieceAt(rightOfRightOfKing) == null) {
+                        if (!IsCheck.isCheckWithoutKing(board, rightOfKing, this.color) && !IsCheck.isCheckWithoutKing(board, rightOfRightOfKing, this.color)) {
+                            Position potentialOpposingKingPosition = new Position(1, 6);  // Just need to check one position for opposing king
+                            Piece pieceAtPosition = board.getPieceAt(potentialOpposingKingPosition);
+                            if (pieceAtPosition == null || !(pieceAtPosition.getType() == Piece.PieceType.KING)) {
+                                // This condition now checks if the position is either empty or does not contain an opposing king.
+                                legalMoves.add(new Move(kingPosition, rightOfRightOfKing, this, rookPosition, rightOfKing));
+                            }
+                        }
+                    }
+                }
+                // Logic for white queen side castle
+                if (!board.getHasMoved(new Position(0, 4)) && !board.getHasMoved(new Position(0, 0))) {
+                    // New position for adjacent square to the left of the king
+                    Position leftOfKing = new Position(0, 3);
+                    Position leftOfLeftOfKing = new Position(0, 2);
+                    Position kingPosition = new Position(0, 4);
+                    Position rookPosition = new Position(0, 0);
+                    if (board.getPieceAt(leftOfKing) == null && board.getPieceAt(leftOfLeftOfKing) == null) {
+                        if (!IsCheck.isCheckWithoutKing(board, leftOfKing, this.color) && !IsCheck.isCheckWithoutKing(board, leftOfLeftOfKing, this.color)) {
+                            Position potentialOpposingKingPosition = new Position(1, 1);  // Just need to check two position for opposing king for queenside
+                            Piece pieceAtPosition = board.getPieceAt(potentialOpposingKingPosition);
+                            if (pieceAtPosition == null || !(pieceAtPosition.getType() == Piece.PieceType.KING)) {
+                                Position potentialOpposingKingPosition2 = new Position(1, 2);  // Just need to check two position for opposing king for queenside
+                                Piece pieceAtPosition2 = board.getPieceAt(potentialOpposingKingPosition2);
+                                if (pieceAtPosition2 == null || !(pieceAtPosition2.getType() == Piece.PieceType.KING)) {
+                                    // This condition now checks if the position is either empty or does not contain an opposing king.
+                                    legalMoves.add(new Move(kingPosition, leftOfLeftOfKing, this, rookPosition, leftOfKing));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // Logic for black king
+            else if (this.color == Color.BLACK) {
+                // Logic for black king side castle
+                if (!board.getHasMoved(new Position(7, 4)) && !board.getHasMoved(new Position(7, 7))) {
+                    // New position for adjacent square to the right of the king
+                    Position rightOfKing = new Position(7, 5);
+                    Position rightOfRightOfKing = new Position(7, 6);
+                    Position kingPosition = new Position(7, 4);
+                    Position rookPosition = new Position(7, 7);
+                    if (board.getPieceAt(rightOfKing) == null && board.getPieceAt(rightOfRightOfKing) == null) {
+                        if (!IsCheck.isCheckWithoutKing(board, rightOfKing, this.color) && !IsCheck.isCheckWithoutKing(board, rightOfRightOfKing, this.color)) {
+                            Position potentialOpposingKingPosition = new Position(6, 6);  // Just need to check one position for opposing king
+                            Piece pieceAtPosition = board.getPieceAt(potentialOpposingKingPosition);
+                            if (pieceAtPosition == null || !(pieceAtPosition.getType() == Piece.PieceType.KING)) {
+                                // This condition now checks if the position is either empty or does not contain an opposing king.
+                                legalMoves.add(new Move(kingPosition, rightOfRightOfKing, this, rookPosition, rightOfKing));
+                            }
+                        }
+                    }
+                }
+                // Logic for black queen side castle
+                if (!board.getHasMoved(new Position(7, 4)) && !board.getHasMoved(new Position(7, 0))) {
+                    // New position for adjacent square to the left of the king
+                    Position leftOfKing = new Position(7, 3);
+                    Position leftOfLeftOfKing = new Position(7, 2);
+                    Position kingPosition = new Position(7, 4);
+                    Position rookPosition = new Position(7, 0);
+                    if (board.getPieceAt(leftOfKing) == null && board.getPieceAt(leftOfLeftOfKing) == null) {
+                        if (!IsCheck.isCheckWithoutKing(board, leftOfKing, this.color) && !IsCheck.isCheckWithoutKing(board, leftOfLeftOfKing, this.color)) {
+                            Position potentialOpposingKingPosition = new Position(6,1);  // Just need to check two position for opposing king for queenside
+                            Piece pieceAtPosition = board.getPieceAt(potentialOpposingKingPosition);
+                            if (pieceAtPosition == null || !(pieceAtPosition.getType() == Piece.PieceType.KING)) {
+                                Position potentialOpposingKingPosition2 = new Position(6, 2);  // Just need to check two position for opposing king for queenside
+                                Piece pieceAtPosition2 = board.getPieceAt(potentialOpposingKingPosition2);
+                                if (pieceAtPosition2 == null || !(pieceAtPosition2.getType() == Piece.PieceType.KING)) {
+                                    // This condition now checks if the position is either empty or does not contain an opposing king.
+                                    legalMoves.add(new Move(kingPosition, leftOfLeftOfKing, this, rookPosition, leftOfKing));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return legalMoves;
     }
 

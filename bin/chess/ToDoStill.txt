@@ -1,5 +1,2 @@
 Still need castling (should do in the King class probably?), en passant (in pawn class probably?), 
 and promotion at least (both explicit and implicit). might want it to be in pawn class to take care of implicit promotion
-Do we reset the game manually after checkmate?? will be easy to implement if we are suppossed to. But should know if we need to first.
-Same question as above for draw and resign. assuming no right now
-NOTE: This is actually addressed in the FAQ's section, looks like we don't need to.

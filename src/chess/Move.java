@@ -5,7 +5,11 @@ public class Move {
     private final Position endPosition;
     private final Piece pieceMoved;
 
-    // Constructor for a move
+    // Additional fields for rook's move in case of castling
+    private Position rookStartPosition;
+    private Position rookEndPosition;
+
+    // Constructor for a regular move
     public Move(Position startPosition, Position endPosition, Piece pieceMoved) {
         this.startPosition = startPosition;
         this.endPosition = endPosition;
@@ -24,6 +28,23 @@ public class Move {
     public Piece getPieceMoved() {
         return pieceMoved;
     }
+
+    // Constructor for a castling move
+    public Move(Position startPosition, Position endPosition, Piece pieceMoved, Position rookStartPosition, Position rookEndPosition) {
+        this(startPosition, endPosition, pieceMoved);
+        this.rookStartPosition = rookStartPosition;
+        this.rookEndPosition = rookEndPosition;
+    }
+
+    // Getters for rook's move
+    public Position getRookStartPosition() {
+        return rookStartPosition;
+    }
+
+    public Position getRookEndPosition() {
+        return rookEndPosition;
+    }
+
     public static Move convertParsedMoveToMove(ParsedMove parsedMove, Board board) {
         // Convert the start and end files from PieceFile to their respective column indices
         int startColumn = parsedMove.startFile.ordinal(); // Returns an int representing position in the enum, starting at 0
@@ -58,5 +79,4 @@ public class Move {
     
         return positionsEqual && piecesEqual;
     }
-    
 }

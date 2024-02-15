@@ -44,6 +44,11 @@ public class Chess {
 	public static Player currentPlayer = Player.white;
 	// We want a field for prior move here later, to check for en passant and self-check
 	public static Move priorMove = null;
+
+	// Getter for priorMove, for pawn class to implement en passant
+	public static Move getPriorMove() {
+		return priorMove;
+	}
 	
 	enum Player { white, black }
 	
