@@ -1,2 +1,2 @@
-Still need en passant (in pawn class mostly), 
-and promotion at least (both explicit and implicit). probably want this in the chess class itself
+Still need en passant (in pawn class mostly).
+Also need to see if we can have a move like e7 e8 N draw? as a possbile input. Probably need to ask for this
