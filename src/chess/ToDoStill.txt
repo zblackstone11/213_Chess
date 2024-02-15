@@ -1,2 +1,3 @@
-Still need en passant (in pawn class mostly).
-Also need to see if we can have a move like e7 e8 N draw? as a possbile input. Probably need to ask for this
+Still need en passant (in pawn class most likely seems like the best idea).
+Lots of error testing needed too.
+And question: is move is both a draw and check, what message do we return?

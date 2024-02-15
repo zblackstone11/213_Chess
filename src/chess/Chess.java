@@ -45,7 +45,7 @@ public class Chess {
 	// We want a field for prior move here later, to check for en passant and self-check
 	public static Move priorMove = null;
 
-	// Getter for priorMove, for pawn class to implement en passant
+	// Getter for priorMove, for pawn class to implement en passant in Pawn class
 	public static Move getPriorMove() {
 		return priorMove;
 	}
@@ -164,8 +164,14 @@ public class Chess {
 			// If the move is tentatively legal AND does not result in self-check, execute the move
 			board = ExecuteMove.executeMove(newmove, board);
 			priorMove = newmove; // Update prior move for potential en passant that occurs later in the game
-			// IF PRIOR MOVE WAS IMPLICIT PAWN PROMOTION, PROMOTE PAWN TO QUEEN HANDLE HERE
-			ImplicitPawnPromotion.promotePawn(priorMove, board); // possible solution needs testing
+			// Check if the move is an implicit or explicit pawn promotion
+			if (move.contains("R") || move.contains("N") || move.contains("B") || move.contains("Q")) {
+				// Set parsedmove.promotionPieceType to the letter that triggered the if statement above (R, N, or B)
+				// This is a very speical case like 'e7 e8 R draw?' so we need to use the right character in the forgoing string
+				parsedMove.setPromotionPieceType(move.charAt(move.length() - 7));
+				ExplicitPawnPromotion.promotePawn(priorMove, parsedMove, board);
+			}
+			else {ImplicitPawnPromotion.promotePawn(priorMove, board);} // only changes if the move is an implicit pawn promotion
 			Piece.Color opponentColor = (currentPlayer == Player.white) ? Piece.Color.BLACK : Piece.Color.WHITE;
 			currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white; // Switch turn now that we saved the prior move info
 			// Check if the move has put the opponent's king in check
@@ -176,7 +182,8 @@ public class Chess {
 					returnPlay.message = (opponentColor == Piece.Color.WHITE) ? ReturnPlay.Message.CHECKMATE_BLACK_WINS : ReturnPlay.Message.CHECKMATE_WHITE_WINS;
 				} else {
 					// If it's just check and not checkmate, set the message to CHECK
-					returnPlay.message = ReturnPlay.Message.CHECK;
+					//returnPlay.message = ReturnPlay.Message.CHECK; // have to decide whether just to return draw or check here
+					returnPlay.message = ReturnPlay.Message.DRAW; // have to decide whether just to return draw or check here
 				}
 			} else {
 				returnPlay.message = ReturnPlay.Message.DRAW; // else it's a draw
@@ -220,7 +227,7 @@ public class Chess {
 			board = ExecuteMove.executeMove(newmove, board);
 			priorMove = newmove; // Update prior move
 			// IF PRIOR MOVE WAS IMPLICIT PAWN PROMOTION, PROMOTE PAWN TO QUEEN HANGLE HERE
-			ImplicitPawnPromotion.promotePawn(priorMove, board); // possible solution needs testing
+			ImplicitPawnPromotion.promotePawn(priorMove, board);
 			Piece.Color opponentColor = (currentPlayer == Player.white) ? Piece.Color.BLACK : Piece.Color.WHITE;
 			currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white; // Switch turn
 			// Check if the move has put the opponent's king in check
