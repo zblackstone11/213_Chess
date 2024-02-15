@@ -21,4 +21,9 @@ public class Position {
     public int getColumn() {
         return column;
     }
+
+    // Method for equality check
+    public boolean equals(Position other) {
+        return this.row == other.row && this.column == other.column;
+    }
 }
