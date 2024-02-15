@@ -1,2 +1,2 @@
 Still need en passant (in pawn class mostly), 
-and promotion at least (both explicit and implicit). might want it to be in pawn class to take care of implicit promotion
+and promotion at least (both explicit and implicit). probably want this in the chess class itself

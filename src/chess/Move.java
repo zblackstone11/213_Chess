@@ -55,6 +55,13 @@ public class Move {
         Position start = new Position(parsedMove.startRank - 1, startColumn);
         Position end = new Position(parsedMove.endRank - 1, endColumn);
 
+        // Get the piece at the start position, checking if it's null
+        Piece pieceAtStart = board.getPieceAt(start);
+        if (pieceAtStart == null) {
+            // If there's no piece at the start, return a Move with null piece which is handled in the next method chess
+            return new Move(start, end, null);
+        }
+
         // if the piece at the start position is the king, and the end position is two squares to the right or left, then it's a castling move
         // Check if the piece at the start position is a king
         if (board.getPieceAt(start).getType() == Piece.PieceType.KING) {
