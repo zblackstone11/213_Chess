@@ -54,12 +54,35 @@ public class Move {
         // Ranks are 1-based and need to be converted to 0-based row index
         Position start = new Position(parsedMove.startRank - 1, startColumn);
         Position end = new Position(parsedMove.endRank - 1, endColumn);
+
+        // if the piece at the start position is the king, and the end position is two squares to the right or left, then it's a castling move
+
+        // Check if the piece at the start position is a king
+        if (board.getPieceAt(start).getType() == Piece.PieceType.KING) {
+            // Check if the end position is two squares to the right or left of the start position
+            if (end.getColumn() - start.getColumn() == 2) {
+                // If the end position is two squares to the right, then the rook's move is to the right of the king
+                Position rookStart = new Position(start.getRow(), 7);
+                Position rookEnd = new Position(start.getRow(), 5);
+                // Create a new Move object for the castling move
+                Move move = new Move(start, end, board.getPieceAt(start), rookStart, rookEnd);
+                return move;
+            } else if (end.getColumn() - start.getColumn() == -2) {
+                // If the end position is two squares to the left, then the rook's move is to the left of the king
+                Position rookStart = new Position(start.getRow(), 0);
+                Position rookEnd = new Position(start.getRow(), 3);
+                // Create a new Move object for the castling move
+                Move move = new Move(start, end, board.getPieceAt(start), rookStart, rookEnd);
+                return move;
+            }
+        }
     
         // Create a new Move object
         Move move = new Move(start, end, board.getPieceAt(start));
     
         return move;
     }    
+
     // Override the equals method to compare two Move objects, used in the another method
     public boolean equals(Object obj) {
         if (this == obj) return true;
