@@ -53,7 +53,7 @@ public class Move {
     // Constructor for en passant move
     public Move(Position startPosition, Position endPosition, Piece pieceMoved, boolean isEnPassant, Position capturedPawnPosition) {
         this(startPosition, endPosition, pieceMoved);
-        this.isEnPassant = isEnPassant;
+        this.isEnPassant = isEnPassant; 
         this.capturedPawnPosition = capturedPawnPosition;
     }
 
@@ -104,8 +104,39 @@ public class Move {
                 return move;
             }
         }
+
+        // For an en passant move
+        else if (board.getPieceAt(start).getType() == Piece.PieceType.PAWN && board.getPieceAt(end) == null) {
+            Move priorMove = Chess.getPriorMove();
+            if (priorMove != null && priorMove.getPieceMoved().getType() == Piece.PieceType.PAWN) {
+                int startRow = priorMove.getStartPosition().getRow(); // Get the row of the prior move's start position
+                int endRow = priorMove.getEndPosition().getRow(); // Get the row of the prior move's end position
+                int pawnRow = start.getRow(); // Get the row of the current pawn's position
+                int pawnColumn = start.getColumn(); // Get the column of the current pawn's position
+                int priorMoveEndColumn = priorMove.getEndPosition().getColumn(); // Get the column of the prior move's end position
+        
+                // Check if the pawn moved two squares
+                boolean pawnMovedTwoSquares = Math.abs(startRow - endRow) == 2;
+        
+                // Check if the pawn is on the correct rank
+                boolean isPawnOnFifthRank = (board.getPieceAt(start).getColor() == Piece.Color.WHITE && pawnRow == 4) || (board.getPieceAt(start).getColor() == Piece.Color.BLACK && pawnRow == 3);
+        
+                // Check if the prior move's end position is adjacent to the current pawn's position
+                boolean isAdjacentColumn = Math.abs(pawnColumn - priorMoveEndColumn) == 1;
+
+                // Check if the intended end position is on the same column as the last move's end column
+                boolean isCorrectEndColumn = end.getColumn() == priorMoveEndColumn;
+        
+                if (pawnMovedTwoSquares && isPawnOnFifthRank && isAdjacentColumn && isCorrectEndColumn) {
+                    // Calculate the captured pawn position
+                    Position capturedPawnPosition = priorMove.getEndPosition();
+                    // Create an en passant move
+                    return new Move(start, end, board.getPieceAt(start), true, capturedPawnPosition);
+                }
+            }
+        }        
     
-        // Create a new Move object
+        // Create a new Move object for normal moves
         Move move = new Move(start, end, board.getPieceAt(start));
     
         return move;

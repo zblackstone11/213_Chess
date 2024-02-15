@@ -1,3 +1,5 @@
-Still need en passant (in pawn class most likely seems like the best idea).
-Lots of error testing needed too.
-And question: is move is both a draw and check, what message do we return? right now i have it returning draw as long as not checkmate
+To do:
+    1. Might want to reimport the original chess class and copy all the code we wrote over, I deleted a lot of the stock text to keep it more
+    manageable, but the write-up seems like that MIGHT be risky (though not necessarilly, I didn't change anything important)
+Known Errors:
+    The great mystery, where does it break

@@ -75,6 +75,17 @@ public class Chess {
 			return returnPlay;
 		}
 
+		// Before processing the move, check if the current player is making a move with a piece of their own color
+		Position startPosition = new Position(parsedMove.startRank - 1, parsedMove.startFile.ordinal());
+		Piece initialPiece = board.getPieceAt(startPosition);
+	
+		// If there's no piece at the start position or if the piece's color doesn't match the current player's turn
+		if (initialPiece == null || (initialPiece.getColor() == Piece.Color.WHITE && currentPlayer != Player.white) || (initialPiece.getColor() == Piece.Color.BLACK && currentPlayer != Player.black)) {
+			returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
+			returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
+			return returnPlay; // Immediately return, indicating an illegal move due to selecting an empty square or moving out of turn
+		}
+
 		// If the move is an EXPLICIT pawn promotion, return a ReturnPlay object with the appropriate message and the current board state
 		else if (parsedMove.moveType == MoveType.PAWN_PROMOTION) {
 			// Generate the move object from the parsed move

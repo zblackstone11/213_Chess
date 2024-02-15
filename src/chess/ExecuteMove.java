@@ -20,7 +20,7 @@ public class ExecuteMove {
             board.removePieceAt(move.getCapturedPawnPosition());
         }
         // Check if this is a castling move by checking if the move has rook start and end positions
-        if (move.getRookStartPosition() != null && move.getRookEndPosition() != null) {
+        else if (move.getRookStartPosition() != null && move.getRookEndPosition() != null) {
             // Execute the castling move for the king
             board.setPieceAt(move.getEndPosition(), move.getPieceMoved());
             board.setHasMoved(move.getEndPosition(), true);
