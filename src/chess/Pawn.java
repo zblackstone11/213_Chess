@@ -13,10 +13,7 @@ public class Pawn implements Piece {
 
     // method to return a list of legal moves for this pawn
     public List<Move> getLegalMoves(Board board, Position position) {
-        // For en passant, need to check if the last move was a double move by an opponent's pawn
-        // use Chess class's priorMove field to check if the last move was a double move by an opponent's pawn
-        // Also need to check for promotion to queen, so if white and on row 7, or black and on row 1?
-        // might just wanna do that part elsewhere though... but probably here
+       
         List<Move> legalMoves = new ArrayList<>();
         int direction = (this.color == Color.WHITE) ? 1 : -1; // White pawns move up (increase row), black pawns move down (decrease row)
 
@@ -45,7 +42,39 @@ public class Pawn implements Piece {
                 }
             }
         }
+        // En passant
+        Move priorMove = Chess.getPriorMove();
+        if (priorMove != null && priorMove.getPieceMoved().getType() == PieceType.PAWN) {
+            int startRow = priorMove.getStartPosition().getRow();
+            int endRow = priorMove.getEndPosition().getRow();
 
+            // Check if the last move was a two-square move by a pawn
+            if (Math.abs(startRow - endRow) == 2) {
+                // Ensure the current pawn is on the 5th rank for white or the 4th rank for black
+                boolean isCorrectRank = (this.color == Color.WHITE && position.getRow() == 4) || (this.color == Color.BLACK && position.getRow() == 3);
+
+                if (isCorrectRank) {
+                    // Check left side if not on a-file
+                    if (position.getColumn() > 0) {
+                        Position left = new Position(position.getRow(), position.getColumn() - 1);
+                        if (left.equals(priorMove.getEndPosition())) {
+                            Position enPassantMovePos = new Position(position.getRow() + (this.color == Color.WHITE ? 1 : -1), priorMove.getEndPosition().getColumn());
+                            Position capturedPawnPosition = new Position(position.getRow(), priorMove.getEndPosition().getColumn());
+                            legalMoves.add(new Move(position, enPassantMovePos, this, true, capturedPawnPosition));
+                        }
+                    }
+                    // Check right side if not on h-file
+                    if (position.getColumn() < 7) {
+                        Position right = new Position(position.getRow(), position.getColumn() + 1);
+                        if (right.equals(priorMove.getEndPosition())) {
+                            Position enPassantMovePos = new Position(position.getRow() + (this.color == Color.WHITE ? 1 : -1), priorMove.getEndPosition().getColumn());
+                            Position capturedPawnPosition = new Position(position.getRow(), priorMove.getEndPosition().getColumn());
+                            legalMoves.add(new Move(position, enPassantMovePos, this, true, capturedPawnPosition));
+                        }
+                    }
+                }
+            }
+        }
         return legalMoves;
     }
 

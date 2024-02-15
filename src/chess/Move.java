@@ -9,6 +9,11 @@ public class Move {
     private Position rookStartPosition;
     private Position rookEndPosition;
 
+    // Additional fields for en passant
+    private boolean isEnPassant = false;
+    private Position capturedPawnPosition;
+
+
     // Constructor for a regular move
     public Move(Position startPosition, Position endPosition, Piece pieceMoved) {
         this.startPosition = startPosition;
@@ -43,6 +48,23 @@ public class Move {
 
     public Position getRookEndPosition() {
         return rookEndPosition;
+    }
+
+    // Constructor for en passant move
+    public Move(Position startPosition, Position endPosition, Piece pieceMoved, boolean isEnPassant, Position capturedPawnPosition) {
+        this(startPosition, endPosition, pieceMoved);
+        this.isEnPassant = isEnPassant;
+        this.capturedPawnPosition = capturedPawnPosition;
+    }
+
+    // Getter for en passant flag
+    public boolean isEnPassant() {
+        return isEnPassant;
+    }
+
+    // Getter for captured pawn position in en passant
+    public Position getCapturedPawnPosition() {
+        return capturedPawnPosition;
     }
 
     public static Move convertParsedMoveToMove(ParsedMove parsedMove, Board board) {

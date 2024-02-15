@@ -1,3 +1,3 @@
 Still need en passant (in pawn class most likely seems like the best idea).
 Lots of error testing needed too.
-And question: is move is both a draw and check, what message do we return?
+And question: is move is both a draw and check, what message do we return? right now i have it returning draw as long as not checkmate

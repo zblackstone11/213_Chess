@@ -12,6 +12,13 @@ public class ExecuteMove {
         // Execute the move by first removing the piece from the start position
         board.removePieceAt(move.getStartPosition());
 
+        //Check if this is an en passant move
+        if (move.isEnPassant()) {
+            // Set the piece at the end position to the piece that was moved
+            board.setPieceAt(move.getEndPosition(), move.getPieceMoved());
+            // Remove the captured pawn from the board
+            board.removePieceAt(move.getCapturedPawnPosition());
+        }
         // Check if this is a castling move by checking if the move has rook start and end positions
         if (move.getRookStartPosition() != null && move.getRookEndPosition() != null) {
             // Execute the castling move for the king
