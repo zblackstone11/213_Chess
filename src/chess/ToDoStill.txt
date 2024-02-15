@@ -1,2 +1,2 @@
-Still need castling (should do in the King class probably?), en passant (in pawn class probably?), 
+Still need en passant (in pawn class mostly), 
 and promotion at least (both explicit and implicit). might want it to be in pawn class to take care of implicit promotion

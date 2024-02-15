@@ -23,6 +23,7 @@ public class ExecuteMove {
             board.removePieceAt(move.getRookStartPosition());
             board.setPieceAt(move.getRookEndPosition(), rook);
             board.setHasMoved(move.getRookEndPosition(), true);
+            board.setHasMoved(move.getRookStartPosition(), true);
         } else {
             // For regular moves, remove the piece from the end position if there is one
             board.removePieceAt(move.getEndPosition());

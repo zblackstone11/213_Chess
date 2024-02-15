@@ -30,7 +30,7 @@ public class IsCheck {
         return false;
     }
 
-        // New method to check if the king is in check without considering the opposing king
+        // New method to check if the king is in check without considering the opposing king, work around for castling
         public static boolean isCheckWithoutKing(Board board, Position kingPosition, Piece.Color color) {
             // Iterate through the board to find the pieces of the opposite color, excluding the king
             for (int row = 0; row < 8; row++) {

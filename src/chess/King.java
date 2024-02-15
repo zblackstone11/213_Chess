@@ -35,7 +35,7 @@ public class King implements Piece {
                 }
             }
         }
-        // Castling logic NEEDS HELP
+        // Castling logic
         // Determine the row based on the king's color
         int kingRow = (this.color == Color.WHITE) ? 0 : 7;
         if (!IsCheck.isCheckWithoutKing(board, new Position(kingRow, 4), this.color)) {
@@ -53,7 +53,7 @@ public class King implements Piece {
                             Position potentialOpposingKingPosition = new Position(1, 6);  // Just need to check one position for opposing king
                             Piece pieceAtPosition = board.getPieceAt(potentialOpposingKingPosition);
                             if (pieceAtPosition == null || !(pieceAtPosition.getType() == Piece.PieceType.KING)) {
-                                // This condition now checks if the position is either empty or does not contain an opposing king.
+                                // This condition now checks if the position is either empty or does not contain an opposing king, all others have been checked above
                                 legalMoves.add(new Move(kingPosition, rightOfRightOfKing, this, rookPosition, rightOfKing));
                             }
                         }

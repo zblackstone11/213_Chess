@@ -31,7 +31,7 @@ public class Move {
 
     // Constructor for a castling move
     public Move(Position startPosition, Position endPosition, Piece pieceMoved, Position rookStartPosition, Position rookEndPosition) {
-        this(startPosition, endPosition, pieceMoved);
+        this(startPosition, endPosition, pieceMoved); // Call the regular move constructor
         this.rookStartPosition = rookStartPosition;
         this.rookEndPosition = rookEndPosition;
     }
@@ -56,7 +56,6 @@ public class Move {
         Position end = new Position(parsedMove.endRank - 1, endColumn);
 
         // if the piece at the start position is the king, and the end position is two squares to the right or left, then it's a castling move
-
         // Check if the piece at the start position is a king
         if (board.getPieceAt(start).getType() == Piece.PieceType.KING) {
             // Check if the end position is two squares to the right or left of the start position
