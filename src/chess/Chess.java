@@ -1,4 +1,4 @@
-// Zack Blackstone and Stevie
+// Zack Blackstone and Stevie Lange
 package chess;
 
 import java.util.ArrayList;
