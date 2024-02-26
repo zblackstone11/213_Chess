@@ -4,6 +4,8 @@ package chess;
 import java.util.ArrayList;
 import java.util.List;
 
+import chess.Piece.PieceType;
+
 class ReturnPiece {
 	static enum PieceType {WP, WR, WN, WB, WQ, WK, 
 		            BP, BR, BN, BB, BK, BQ};
@@ -94,10 +96,10 @@ public class Chess {
 			Piece movingPiece = board.getPieceAt(newmove.getStartPosition());
 			// Get the list of legal moves for the piece at the start position
 			// Check if there is no piece at the start position
-			if (movingPiece == null) {
+			if (movingPiece == null || movingPiece.getType() != PieceType.PAWN) {
 				returnPlay.piecesOnBoard = ConvertBoardToReturnPieceList.convertToPieceList(board);
 				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
-				return returnPlay; // Immediately return, indicating an illegal move due to selecting an empty square
+				return returnPlay; // Immediately return, indicating an illegal move due to selecting an empty square or not a pawne8 e7 R
 			}
 			List<Move> legalMoves = movingPiece.getLegalMoves(board, newmove.getStartPosition());
 			// Check if the newmove is in the list of legal moves
